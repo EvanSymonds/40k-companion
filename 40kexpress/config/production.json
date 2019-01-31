@@ -1,0 +1,6 @@
+{
+  "name": "40k-companion - Production",
+  "mail": {
+    "host": "prod-mail-server"
+  }
+}
