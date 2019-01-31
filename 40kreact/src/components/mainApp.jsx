@@ -40,6 +40,7 @@ class MainApp extends React.Component {
     }
   }
 
+  //Renders page
   render(){
     return(
       <React.Fragment>
