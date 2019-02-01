@@ -1,6 +1,5 @@
 import React from 'react';
 import Button from './button';
-import ModelProfile from './modelProfile';
 import Detachment from './detachment';
 
 class ArmyBuilder extends React.Component {
@@ -8,7 +7,6 @@ class ArmyBuilder extends React.Component {
     super(props,context);
     this.props = props;
     this.state = {
-      modelProfiles:[],
       detachments: []
     }
     this.actionObserver = props.observer;
@@ -19,31 +17,9 @@ class ArmyBuilder extends React.Component {
   }
 
   actionCallback(observerObject) {
-    if (observerObject.action === 'newProfile') {
-      console.log(`Recieved from button: ${observerObject.id}`);
-      this.addNewProfile();
-    }
     if (observerObject.action === 'newDetachment') {
       console.log(`Recieved from button: ${observerObject.id}`);
       this.addNewDetachment();
-    }
-  }
-
-  addNewProfile(){
-    let profiles = this.state.modelProfiles;
-    console.log(profiles);
-    if (profiles.length < 10){
-      profiles.push({
-        name: 'Name',
-        points: 0,
-        quantity: 1,
-        id: profiles.length
-      })
-      
-      this.setState({
-        modelProfiles: profiles
-      });
-
     }
   }
 
@@ -64,14 +40,6 @@ class ArmyBuilder extends React.Component {
     }
   }
 
-  renderProfiles(){
-    let profiles = this.state.modelProfiles.map(({id}) => {
-      console.log(id);
-      return <ModelProfile observer = {this.actionObserver} key = {id} id ={id} content={'default'}/>;
-    });
-    return profiles;
-  }
-
   renderDetachments(){
     let detachments = this.state.detachments.map(({id}) => {
       console.log(id);
@@ -84,10 +52,8 @@ class ArmyBuilder extends React.Component {
     return(
       <React.Fragment>
         <Button observer = {this.actionObserver} key = {'menu'} label = {'menu'} function = {'navigation'}/>
-        <Button observer = {this.actionObserver} key = {'New profile'} label = {'New profile'} function = {'newProfile'}/>
         <Button observer = {this.actionObserver} key = {'New detachment'} label = {'New detachment'} function = {'newDetachment'}/>
         {this.renderDetachments()}
-        {this.renderProfiles()}
       </React.Fragment>
     )
   }

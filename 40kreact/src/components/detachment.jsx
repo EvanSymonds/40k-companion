@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from './button';
+import ModelProfile from './modelProfile';
 
 class Detachment extends React.Component {
   constructor(props,context){
@@ -8,6 +9,7 @@ class Detachment extends React.Component {
     this.state = {
       mode: 'display',
       name: 'Name',
+      modelProfiles:[],
       types: [
         'Unbound',
         'Patrol',
@@ -34,6 +36,10 @@ class Detachment extends React.Component {
   }
 
   actionCallback(observerObject) {
+    if (observerObject.action === 'newProfile') {
+      console.log(`Recieved from button: ${observerObject.id}`);
+      this.addNewProfile();
+    }
     if (observerObject.action === 'editDetachment') {
       if (observerObject.tag === this.props.id){
         console.log(`Recieved from button: ${observerObject.id}`);
@@ -51,6 +57,24 @@ class Detachment extends React.Component {
         console.log(`Recieved from button: ${observerObject.id}`);
         this.prevType();
       }
+    }
+  }
+
+  addNewProfile(){
+    let profiles = this.state.modelProfiles;
+    console.log(profiles);
+    if (profiles.length < 10){
+      profiles.push({
+        name: 'Name',
+        points: 0,
+        quantity: 1,
+        id: profiles.length
+      })
+      
+      this.setState({
+        modelProfiles: profiles
+      });
+
     }
   }
 
@@ -98,6 +122,14 @@ class Detachment extends React.Component {
     this.setState({type: prev});
   }
 
+  renderProfiles(){
+    let profiles = this.state.modelProfiles.map(({id}) => {
+      console.log(id);
+      return <ModelProfile observer = {this.actionObserver} key = {id} id ={id} content={'default'}/>;
+    });
+    return profiles;
+  }
+
   renderData(){
     if (this.state.mode === 'display'){
       return <h1>{this.state.name}</h1>
@@ -114,6 +146,8 @@ class Detachment extends React.Component {
         <Button observer = {this.actionObserver} tag = {this.props.id} label = {'prev'} function = {'prevDetachType'}/>
         <Button observer = {this.actionObserver} tag = {this.props.id} label = {'next'} function = {'nextDetachType'}/>
         {this.getButtonLabel()}
+        <Button observer = {this.actionObserver} key = {'New profile'} label = {'New profile'} function = {'newProfile'}/>
+        {this.renderProfiles()}
       </React.Fragment>
     )
   }
