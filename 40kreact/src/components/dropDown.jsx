@@ -5,7 +5,6 @@ class DropDown extends React.Component {
     super(props,context);
     this.props = props;
     this.state = {
-      value: 'Unbound'
     }
     this.actionObserver = props.observer;
     this.handleChange = this.handleChange.bind(this);
@@ -25,17 +24,7 @@ class DropDown extends React.Component {
   handleChange(e){
     console.log(e.target.value);
     let val = e.target.value;
-
     this.props.updateTypeHandler(val);
-
-    /*this.setState({value: val}, () =>{
-      console.log(this.state.value);
-      this.actionObserver.notify({
-        action: 'setDetachType',
-        id: this.props.id,
-        type: this.state.value
-      })
-    });*/
   }
 
   render(){

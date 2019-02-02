@@ -50,16 +50,6 @@ class Detachment extends React.Component {
         this.toggleEditButton();
       }
     }
-    if (observerObject.action === 'setDetachType') {
-      if (observerObject.tag === this.props.id){
-        console.log(`Recieved from button: ${observerObject.id}`);
-        this.changeType(observerObject.type);
-      }
-    }
-  }
-
-  changeType(id){
-    this.setState({type: id});
   }
 
   addNewProfile(){
@@ -72,11 +62,9 @@ class Detachment extends React.Component {
         quantity: 1,
         id: profiles.length
       })
-      
       this.setState({
         modelProfiles: profiles
       });
-
     }
   }
 
@@ -86,10 +74,6 @@ class Detachment extends React.Component {
     } else{
       this.setState({mode: 'display'});
     }
-  }
-
-  submitButton(){
-    this.toggleEditButton();
   }
 
   getButtonLabel(){
@@ -103,7 +87,6 @@ class Detachment extends React.Component {
   handleSubmit(e){
     this.setState({name: e.target.value});
   }
-
 
   renderProfiles(){
     let profiles = this.state.modelProfiles.map(({id}) => {
