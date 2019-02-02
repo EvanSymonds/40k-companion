@@ -40,11 +40,11 @@ class ArmyBuilder extends React.Component {
         detachments: detachments
       });
     
-
       axios
-        .put(
-          "http://localhost:3000/armybuilder",
-          {headers: data}
+        .post(
+          "http://localhost:3000/armybuilder/",
+          {name: 'Test',
+          type: 'Unbound'}
         )
         .then(r => console.log(r.status))
         .catch(e => console.log(e));
