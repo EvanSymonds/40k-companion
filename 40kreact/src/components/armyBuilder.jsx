@@ -25,7 +25,6 @@ class ArmyBuilder extends React.Component {
 
   addNewDetachment(){
     let detachments = this.state.detachments;
-    console.log(detachments);
     if (detachments.length < 10){
       detachments.push({
         name: 'Name',
@@ -42,7 +41,6 @@ class ArmyBuilder extends React.Component {
 
   renderDetachments(){
     let detachments = this.state.detachments.map(({id}) => {
-      console.log(id);
       return <Detachment observer = {this.actionObserver} key = {id} id ={id}/>;
     });
     return detachments;

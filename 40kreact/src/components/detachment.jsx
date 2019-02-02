@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from './button';
 import ModelProfile from './modelProfile';
+import DropDown from './dropDown';
 
 class Detachment extends React.Component {
   constructor(props,context){
@@ -10,23 +11,26 @@ class Detachment extends React.Component {
       mode: 'display',
       name: 'Name',
       modelProfiles:[],
-      types: [
-        'Unbound',
-        'Patrol',
-        'Battalion',
-        'Brigade',
-        'Vanguard',
-        'Spearhead',
-        'Outrider',
-        'Supreme command',
-        'Super heavy',
-        'Air wing',
-        'Super heavy aux',
-        'Fortification',
-        'Aux support'
-      ]
+      type: 'Unbound'
     }
-    this.state.type = 'Unbound';
+    this.types = [
+      'Unbound',
+      'Patrol',
+      'Battalion',
+      'Brigade',
+      'Vanguard',
+      'Spearhead',
+      'Outrider',
+      'Supreme command',
+      'Super heavy',
+      'Air wing',
+      'Super heavy aux',
+      'Fortification',
+      'Aux support'
+    ]
+    this.updateType = (type) => {
+      this.setState({type: type});
+    }
     this.actionObserver = props.observer;
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -46,18 +50,16 @@ class Detachment extends React.Component {
         this.toggleEditButton();
       }
     }
-    if (observerObject.action === 'nextDetachType') {
+    if (observerObject.action === 'setDetachType') {
       if (observerObject.tag === this.props.id){
         console.log(`Recieved from button: ${observerObject.id}`);
-        this.nextType();
+        this.changeType(observerObject.type);
       }
     }
-    if (observerObject.action === 'prevDetachType') {
-      if (observerObject.tag === this.props.id){
-        console.log(`Recieved from button: ${observerObject.id}`);
-        this.prevType();
-      }
-    }
+  }
+
+  changeType(id){
+    this.setState({type: id});
   }
 
   addNewProfile(){
@@ -102,25 +104,6 @@ class Detachment extends React.Component {
     this.setState({name: e.target.value});
   }
 
-  nextType(){
-    let current = this.state.type
-    let next = this.state.types.findIndex((index) => index === current) + 1;
-    if (next === this.state.types.length){
-      next = 0;
-    }
-    next = this.state.types[next];
-    this.setState({type: next});
-  }
-
-  prevType(){
-    let current = this.state.type
-    let prev = this.state.types.findIndex((index) => index === current) - 1;
-    if (prev === -1){
-      prev = this.state.types.length - 1;
-    }
-    prev = this.state.types[prev];
-    this.setState({type: prev});
-  }
 
   renderProfiles(){
     let profiles = this.state.modelProfiles.map(({id}) => {
@@ -132,19 +115,26 @@ class Detachment extends React.Component {
 
   renderData(){
     if (this.state.mode === 'display'){
-      return <h1>{this.state.name}</h1>
+      return (
+      <React.Fragment>
+        <h1>{this.state.name}</h1>
+        <h2>{this.state.type}</h2>
+      </React.Fragment>
+      )
     }else {
-      return <input className='detachInput' value={this.state.name} onChange={this.handleSubmit}></input>
+      return (
+      <React.Fragment>
+        <input className='detachInput' value={this.state.name} onChange={this.handleSubmit}></input>
+        <DropDown observer = {this.actionObserver} types = {this.types} id={this.props.id} updateTypeHandler = {this.updateType}/>
+      </React.Fragment>
+      )
     }
   }
 
   render(){
     return(
       <React.Fragment>
-        <h1>{this.renderData()}</h1>
-        <h2>{this.state.type}</h2>
-        <Button observer = {this.actionObserver} tag = {this.props.id} label = {'prev'} function = {'prevDetachType'}/>
-        <Button observer = {this.actionObserver} tag = {this.props.id} label = {'next'} function = {'nextDetachType'}/>
+        {this.renderData()}
         {this.getButtonLabel()}
         <Button observer = {this.actionObserver} key = {'New profile'} label = {'New profile'} function = {'newProfile'}/>
         {this.renderProfiles()}
