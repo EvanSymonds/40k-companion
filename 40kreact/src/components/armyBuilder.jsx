@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from './button';
 import Detachment from './detachment';
+import axios from 'axios';
 
 class ArmyBuilder extends React.Component {
   constructor(props,context){
@@ -26,15 +27,27 @@ class ArmyBuilder extends React.Component {
   addNewDetachment(){
     let detachments = this.state.detachments;
     if (detachments.length < 10){
-      detachments.push({
+      let data = {
         name: 'Name',
         type: 'Unbound',
         id: detachments.length
+      }
+      detachments.push({
+        data
       })
       
       this.setState({
         detachments: detachments
       });
+    
+
+      axios
+        .put(
+          "http://localhost:3000/armybuilder",
+          {headers: data}
+        )
+        .then(r => console.log(r.status))
+        .catch(e => console.log(e));
 
     }
   }
