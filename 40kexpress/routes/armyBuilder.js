@@ -29,10 +29,14 @@ router.put('/', (req, res) => {
   })
 })
 
-router.post('/', (req) => {
+router.post('/', (req, res) => {
   let name = req.body.name;
   let type = req.body.type;
-  detachController.addDetach(name, type, 1);
+  let id = detachController.addDetach(name, type, 1);
+  id.then((id) => {
+    debug(id);
+    res.send(id);
+  })
 })
 
 module.exports = router;

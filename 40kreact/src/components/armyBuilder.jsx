@@ -46,33 +46,28 @@ class ArmyBuilder extends React.Component {
   addNewDetachment(){
     let detachments = this.state.detachments;
     if (detachments.length < 10){
-      let data = {
-        name: 'Name',
-        type: 'Unbound',
-      }
-      detachments.push({
-        data
-      })
-      
-      this.setState({
-        detachments: detachments
-      });
-    
       axios
         .post(
           "http://localhost:3000/armybuilder/",
-          {name: 'Test',
+          {name: 'Name',
           type: 'Unbound'}
         )
-        .then(r => console.log(r.status))
-        .catch(e => console.log(e));
+        .then(res => {
+          let detachArr = this.state.detachments;
+          detachArr.push({
+            _id: res.data,
+            name: 'Name',
+            type: 'Unbound'
+          });
 
+          this.setState({detachments: detachArr});
+        })
+        .catch(e => console.log(e));
     }
   }
 
   renderDetachments(){
     let detachments = this.state.detachments.map((id) => {
-      console.log(id._id);
       return <Detachment observer = {this.actionObserver} key = {id._id} id ={id._id} name={id.name} type={id.type}/>;
     });
     return detachments;

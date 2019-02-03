@@ -36,7 +36,8 @@ async function addDetach(name, type, armyId){
     type: type,
     armyId: armyId
   }); 
-  const result = await detach.save();
+  let result = await detach.save();
+  return(result._id);
 }
 
 
