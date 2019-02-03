@@ -15,8 +15,6 @@ function connect(){
     .catch(err => armyCDebug('Could not connect to database'));
 }
 
-
-
 async function addArmy(name, userId){
   let army = new Army({
     name: name,

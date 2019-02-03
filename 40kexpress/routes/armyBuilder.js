@@ -6,8 +6,19 @@ const detachController = require('../controllers/detachmentController');
 router.use(express.json());
 
 router.get('/', (req,res) => {
-  res.send('Army builder page');
+  const detachs = getAllDetachs();
+  detachs.then((detachs) => {
+    debug({data: detachs});
+    res.send({data: detachs});
+  });
 })
+
+function getAllDetachs(){
+  return new Promise((resolve, reject) => {
+    let detachs = detachController.getAll()
+    resolve(detachs);
+  });
+}
 
 router.post('/', (req) => {
   let name = req.body.name;

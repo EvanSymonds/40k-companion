@@ -8,9 +8,14 @@ class ArmyBuilder extends React.Component {
     super(props,context);
     this.props = props;
     this.state = {
-      detachments: []
+      detachments: [],
+      detachments2: []
     }
     this.actionObserver = props.observer;
+
+    this.getDetachs();
+    console.log(this.state.detachments2);
+
   }
 
   componentDidMount(){
@@ -22,6 +27,23 @@ class ArmyBuilder extends React.Component {
       console.log(`Recieved from button: ${observerObject.id}`);
       this.addNewDetachment();
     }
+  }
+
+  getDetachs(){
+    let detachArr = this.state.detachments;
+    axios
+      .get('http://localhost:3000/armybuilder')
+      .then((res) => {
+        res.data.data.map((detachs) => {
+          
+          detachArr.push(detachs);
+          this.setState({detachments: detachArr});
+        })
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
   }
 
   addNewDetachment(){

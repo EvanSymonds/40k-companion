@@ -16,6 +16,10 @@ function connect(){
     .catch(err => detachCDebug('Could not connect to database'));
 }
 
+async function getAll(){
+  let detachs = await Detach.find();
+  return detachs;
+}
 
 async function addDetach(name, type, armyId){
   let detach = new Detach({
@@ -28,4 +32,5 @@ async function addDetach(name, type, armyId){
 
 
 module.exports.addDetach = addDetach;
+module.exports.getAll = getAll;
 module.exports.connect = connect;
