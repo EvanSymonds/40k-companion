@@ -6,9 +6,8 @@ const detachController = require('../controllers/detachmentController');
 router.use(express.json());
 
 router.get('/', (req,res) => {
-  const detachs = getAllDetachs();
+  let detachs = getAllDetachs();
   detachs.then((detachs) => {
-    debug({data: detachs});
     res.send({data: detachs});
   });
 })
@@ -19,6 +18,16 @@ function getAllDetachs(){
     resolve(detachs);
   });
 }
+
+router.put('/', (req, res) => {
+  let data = req.body.params.data;
+  let id = req.body.params.id;
+  debug(req.body);
+  let detachs = detachController.updateDetach(id, data);
+  detachs.then((detachs) => {
+    debug(detachs);
+  })
+})
 
 router.post('/', (req) => {
   let name = req.body.name;

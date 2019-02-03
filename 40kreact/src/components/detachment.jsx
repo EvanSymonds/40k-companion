@@ -2,6 +2,7 @@ import React from 'react';
 import Button from './button';
 import ModelProfile from './modelProfile';
 import DropDown from './dropDown';
+import axios from 'axios';
 
 class Detachment extends React.Component {
   constructor(props,context){
@@ -10,9 +11,11 @@ class Detachment extends React.Component {
     this.state = {
       mode: 'display',
       name: 'Name',
-      modelProfiles:[],
-      type: 'Unbound'
+      type: 'Unbound',
+      modelProfiles:[]
     }
+    this.state.name = this.props.name;
+    this.state.type = this.props.type;
     this.types = [
       'Unbound',
       'Patrol',
@@ -29,7 +32,7 @@ class Detachment extends React.Component {
       'Aux support'
     ]
     this.updateType = (type) => {
-      this.setState({type: type});
+      this.setState({type});
     }
     this.actionObserver = props.observer;
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -50,6 +53,18 @@ class Detachment extends React.Component {
         this.toggleEditButton();
       }
     }
+  }
+
+  updateDetach(){
+    let id = this.props.id;
+    let data = {
+      name: this.state.name,
+      type: this.state.type
+    }
+    axios
+      .put('http://localhost:3000/armybuilder', 
+      {params: {data: data, id: id}})
+      .then(r => console.log(r.status))
   }
 
   addNewProfile(){
@@ -73,6 +88,7 @@ class Detachment extends React.Component {
       this.setState({mode: 'edit'});
     } else{
       this.setState({mode: 'display'});
+      this.updateDetach();
     }
   }
 
@@ -90,7 +106,6 @@ class Detachment extends React.Component {
 
   renderProfiles(){
     let profiles = this.state.modelProfiles.map(({id}) => {
-      console.log(id);
       return <ModelProfile observer = {this.actionObserver} key = {id} id ={id} content={'default'}/>;
     });
     return profiles;

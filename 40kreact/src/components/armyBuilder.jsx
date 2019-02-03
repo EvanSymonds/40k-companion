@@ -9,13 +9,10 @@ class ArmyBuilder extends React.Component {
     this.props = props;
     this.state = {
       detachments: [],
-      detachments2: []
     }
     this.actionObserver = props.observer;
-
     this.getDetachs();
-    console.log(this.state.detachments2);
-
+    console.log(this.state.detachments);
   }
 
   componentDidMount(){
@@ -52,7 +49,6 @@ class ArmyBuilder extends React.Component {
       let data = {
         name: 'Name',
         type: 'Unbound',
-        id: detachments.length
       }
       detachments.push({
         data
@@ -75,8 +71,9 @@ class ArmyBuilder extends React.Component {
   }
 
   renderDetachments(){
-    let detachments = this.state.detachments.map(({id}) => {
-      return <Detachment observer = {this.actionObserver} key = {id} id ={id}/>;
+    let detachments = this.state.detachments.map((id) => {
+      console.log(id._id);
+      return <Detachment observer = {this.actionObserver} key = {id._id} id ={id._id} name={id.name} type={id.type}/>;
     });
     return detachments;
   }
