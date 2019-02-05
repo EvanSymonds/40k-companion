@@ -127,7 +127,7 @@ class Detachment extends React.Component {
         {this.renderData()}
         {this.getButtons()}
         <Button observer = {this.actionObserver} key = {`newprofile ${this.props.id}`} label = {'New profile'} function = {'newProfile'}/>
-        <Button observer = {this.actionObserver} key = {this.props.id} label = {'Delete'} function = {'delete'}/>
+        <Button observer = {this.actionObserver} key = {this.props.id} tag={this.props.id}  label = {'Delete'} function = {'delete'}/>
         {this.renderProfiles()}
       </React.Fragment>
     )

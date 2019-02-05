@@ -31,7 +31,7 @@ function updateDetach(id, data){
 
 function deleteDetach(id){
   return new Promise((resolve, reject) => {
-    let detach = Detach.deleteOne({_id: id});
+    let detach = Detach.deleteOne({"_id": id});
     resolve(detach);
   })
 }

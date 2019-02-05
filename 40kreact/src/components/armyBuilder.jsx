@@ -25,14 +25,13 @@ class ArmyBuilder extends React.Component {
     }
     if (observerObject.action === 'delete') {
       console.log(`Recieved from button: ${observerObject.id}`);
-      this.deleteDetach(observerObject.key);
+      this.deleteDetach(observerObject.tag);
     }
     if (observerObject.action === 'saveDetachmentData') {
       console.log(`Recieved from button: ${observerObject.id}`);
       let id = observerObject.id;
       let name = observerObject.name;
       let type = observerObject.type;
-
 
       this.replaceDetach(id, name, type);
       this.updateDetach(id, name, type);
@@ -59,13 +58,13 @@ class ArmyBuilder extends React.Component {
     this.setState({detachments: detachmentsCopy});
   }
 
-  updateDetach(name, type, id){
+  updateDetach(id, name, type){
     let data = {
       name: name,
       type: type
     }
     axios
-      .put('http://localhost:3000/armybuilder', 
+      .put('http://localhost:3000/armybuilder/', 
       {params: {data: data, id: id}})
       .then(r => console.log(r.status))
   }
@@ -76,12 +75,24 @@ class ArmyBuilder extends React.Component {
         return detach;
       }
     });
+
+    let detachArr = this.state.detachments;
+    let index = this.state.detachments.indexOf(detach);
+    detachArr.splice(index, 1);
+
+    this.setState({detachments: detachArr});
+
+    axios.delete("http://localhost:3000/armybuilder/",
+      {data: {id: id}})
+      .then((res) => {
+        console.log(res);
+      })
   }
 
   getDetachs(){
     let detachArr = this.state.detachments;
     axios
-      .get('http://localhost:3000/armybuilder')
+      .get('http://localhost:3000/armybuilder/')
       .then((res) => {
         res.data.data.map((detachs) => {
           
@@ -121,7 +132,6 @@ class ArmyBuilder extends React.Component {
   }
 
   renderDetachments(){
-    if (this.state.detachments.length === 0) return "Loading";
     let detachments = this.state.detachments.map((id) => {
       return <Detachment observer = {this.actionObserver} key = {id._id} id ={id._id} name={id.name} type={id.type}/>;
     });

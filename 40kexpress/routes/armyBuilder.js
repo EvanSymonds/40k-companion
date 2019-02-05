@@ -26,6 +26,7 @@ router.put('/', (req, res) => {
   let detachs = detachController.updateDetach(id, data);
   detachs.then((detachs) => {
     debug(detachs);
+    res.send(detachs);
   })
 })
 
@@ -40,10 +41,12 @@ router.post('/', (req, res) => {
 })
 
 router.delete('/', (req, res) => {
-  let id = req.body.data;
+  debug(req.body.id);
+  let id = req.body.id;
+  
   let detach = detachController.deleteDetach(id);
-  detach.then((id) => {
-    debug(id);
+  detach.then((detach) => {
+    res.send(detach);
   })
 })
 
