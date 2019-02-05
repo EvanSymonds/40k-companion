@@ -39,4 +39,12 @@ router.post('/', (req, res) => {
   })
 })
 
+router.delete('/', (req, res) => {
+  let id = req.body.data;
+  let detach = detachController.deleteDetach(id);
+  detach.then((id) => {
+    debug(id);
+  })
+})
+
 module.exports = router;

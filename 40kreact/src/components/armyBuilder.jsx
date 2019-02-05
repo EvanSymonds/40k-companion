@@ -11,12 +11,11 @@ class ArmyBuilder extends React.Component {
       detachments: [],
     }
     this.actionObserver = props.observer;
-    this.getDetachs();
-    console.log(this.state.detachments);
   }
 
   componentDidMount(){
     this.actionObserver.subscribe(this);
+    this.getDetachs();
   }
 
   actionCallback(observerObject) {
@@ -24,6 +23,59 @@ class ArmyBuilder extends React.Component {
       console.log(`Recieved from button: ${observerObject.id}`);
       this.addNewDetachment();
     }
+    if (observerObject.action === 'delete') {
+      console.log(`Recieved from button: ${observerObject.id}`);
+      this.deleteDetach(observerObject.key);
+    }
+    if (observerObject.action === 'saveDetachmentData') {
+      console.log(`Recieved from button: ${observerObject.id}`);
+      let id = observerObject.id;
+      let name = observerObject.name;
+      let type = observerObject.type;
+
+
+      this.replaceDetach(id, name, type);
+      this.updateDetach(id, name, type);
+    }
+  }
+
+  replaceDetach(id, name, type){
+    let detach = this.state.detachments.find((detach) => {
+      if (detach._id === id){
+        return detach;
+      }
+    })
+    let index = this.state.detachments.indexOf(detach);
+    console.log(index);
+    let detachmentsCopy = this.state.detachments;
+    detachmentsCopy[index] = {
+      _id: id,
+      name: name,
+      type: type,
+      armyId: 1
+    }
+    console.log(detachmentsCopy);
+
+    this.setState({detachments: detachmentsCopy});
+  }
+
+  updateDetach(name, type, id){
+    let data = {
+      name: name,
+      type: type
+    }
+    axios
+      .put('http://localhost:3000/armybuilder', 
+      {params: {data: data, id: id}})
+      .then(r => console.log(r.status))
+  }
+
+  deleteDetach(id){
+    let detach = this.state.detachments.find((detach) => {
+      if (detach._id === id){
+        return detach;
+      }
+    });
   }
 
   getDetachs(){
@@ -57,7 +109,9 @@ class ArmyBuilder extends React.Component {
           detachArr.push({
             _id: res.data,
             name: 'Name',
-            type: 'Unbound'
+            type: 'Unbound',
+            armyId: 1,
+            _v: 0
           });
 
           this.setState({detachments: detachArr});
@@ -67,6 +121,7 @@ class ArmyBuilder extends React.Component {
   }
 
   renderDetachments(){
+    if (this.state.detachments.length === 0) return "Loading";
     let detachments = this.state.detachments.map((id) => {
       return <Detachment observer = {this.actionObserver} key = {id._id} id ={id._id} name={id.name} type={id.type}/>;
     });

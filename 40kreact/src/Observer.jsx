@@ -51,7 +51,7 @@ class Observer {
   
         console.log('observer object was', data);
   
-        console.log(err.stack);
+        //console.log(err.stack);
       }
     });
   }

@@ -10,12 +10,10 @@ class Detachment extends React.Component {
     this.props = props;
     this.state = {
       mode: 'display',
-      name: 'Name',
-      type: 'Unbound',
+      name: this.props.name,
+      type: this.props.type,
       modelProfiles:[]
     }
-    this.state.name = this.props.name;
-    this.state.type = this.props.type;
     this.types = [
       'Unbound',
       'Patrol',
@@ -31,11 +29,14 @@ class Detachment extends React.Component {
       'Fortification',
       'Aux support'
     ]
+    this.name = this.props.name;
     this.updateType = (type) => {
       this.setState({type});
     }
     this.actionObserver = props.observer;
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.toggleMode = this.toggleMode.bind(this);
+    this.sendData = this.sendData.bind(this);
   }
 
   componentDidMount(){
@@ -47,24 +48,6 @@ class Detachment extends React.Component {
       console.log(`Recieved from button: ${observerObject.id}`);
       this.addNewProfile();
     }
-    if (observerObject.action === 'editDetachment') {
-      if (observerObject.tag === this.props.id){
-        console.log(`Recieved from button: ${observerObject.id}`);
-        this.toggleEditButton();
-      }
-    }
-  }
-
-  updateDetach(){
-    let id = this.props.id;
-    let data = {
-      name: this.state.name,
-      type: this.state.type
-    }
-    axios
-      .put('http://localhost:3000/armybuilder', 
-      {params: {data: data, id: id}})
-      .then(r => console.log(r.status))
   }
 
   addNewProfile(){
@@ -83,24 +66,33 @@ class Detachment extends React.Component {
     }
   }
 
-  toggleEditButton(){
+  toggleMode(){
     if (this.state.mode === 'display'){
       this.setState({mode: 'edit'});
     } else{
       this.setState({mode: 'display'});
-      this.updateDetach();
     }
   }
 
-  getButtonLabel(){
+  getButtons(){
     if (this.state.mode === 'display'){
-      return <Button observer = {this.actionObserver} function={'editDetachment'} label={'Edit'} tag={this.props.id}/>
+      return <button onClick={this.toggleMode}>Edit</button>
     } else{
-      return <Button observer = {this.actionObserver} function={'editDetachment'} label={'Save'} tag={this.props.id}/>
+      return <button onClick={this.sendData}>Save</button>
     }
   }
 
-  handleSubmit(e){
+  sendData(){
+    this.actionObserver.notify({
+      action: "saveDetachmentData",
+      name: this.state.name,
+      type: this.state.type,
+      id: this.props.id
+    });
+    this.toggleMode();
+  }
+
+  handleChange(e){
     this.setState({name: e.target.value});
   }
 
@@ -115,14 +107,14 @@ class Detachment extends React.Component {
     if (this.state.mode === 'display'){
       return (
       <React.Fragment>
-        <h1>{this.state.name}</h1>
-        <h2>{this.state.type}</h2>
+        <h1>{this.props.name}</h1>
+        <h2>{this.props.type}</h2>
       </React.Fragment>
       )
     }else {
       return (
       <React.Fragment>
-        <input className='detachInput' value={this.state.name} onChange={this.handleSubmit}></input>
+        <input className='detachInput' value={this.state.name} onChange={this.handleChange}></input>
         <DropDown observer = {this.actionObserver} types = {this.types} id={this.props.id} updateTypeHandler = {this.updateType}/>
       </React.Fragment>
       )
@@ -133,8 +125,9 @@ class Detachment extends React.Component {
     return(
       <React.Fragment>
         {this.renderData()}
-        {this.getButtonLabel()}
-        <Button observer = {this.actionObserver} key = {'New profile'} label = {'New profile'} function = {'newProfile'}/>
+        {this.getButtons()}
+        <Button observer = {this.actionObserver} key = {`newprofile ${this.props.id}`} label = {'New profile'} function = {'newProfile'}/>
+        <Button observer = {this.actionObserver} key = {this.props.id} label = {'Delete'} function = {'delete'}/>
         {this.renderProfiles()}
       </React.Fragment>
     )

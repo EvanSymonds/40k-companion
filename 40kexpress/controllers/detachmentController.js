@@ -22,12 +22,18 @@ async function getAll(){
 }
 
 function updateDetach(id, data){
-  detachCDebug(id);
   return new Promise((resolve, reject) => {
     let detach = Detach.findByIdAndUpdate(id, 
       {name: data.name, type: data.type});
     resolve(detach);
   });
+}
+
+function deleteDetach(id){
+  return new Promise((resolve, reject) => {
+    let detach = Detach.deleteOne({_id: id});
+    resolve(detach);
+  })
 }
 
 async function addDetach(name, type, armyId){
@@ -43,5 +49,6 @@ async function addDetach(name, type, armyId){
 
 module.exports.addDetach = addDetach;
 module.exports.updateDetach = updateDetach;
+module.exports.deleteDetach = deleteDetach;
 module.exports.getAll = getAll;
 module.exports.connect = connect;

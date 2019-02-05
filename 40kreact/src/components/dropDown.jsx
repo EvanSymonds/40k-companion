@@ -16,7 +16,7 @@ class DropDown extends React.Component {
 
   renderOptions(e){
     let options = this.props.types.map((option) => {
-      return <option value={option}>{option}</option>;
+      return <option value={option} key={option}>{option}</option>;
     });
     return options;
   }
