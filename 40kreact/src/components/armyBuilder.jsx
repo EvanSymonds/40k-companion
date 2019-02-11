@@ -23,7 +23,7 @@ class ArmyBuilder extends React.Component {
       console.log(`Recieved from button: ${observerObject.id}`);
       this.addNewDetachment();
     }
-    if (observerObject.action === 'delete') {
+    if (observerObject.action === 'deleteDetach') {
       console.log(`Recieved from button: ${observerObject.id}`);
       this.deleteDetach(observerObject.tag);
     }
@@ -64,7 +64,7 @@ class ArmyBuilder extends React.Component {
       type: type
     }
     axios
-      .put('http://localhost:3000/armybuilder/', 
+      .put('http://localhost:3000/armybuilder/detach', 
       {params: {data: data, id: id}})
       .then(r => console.log(r.status))
   }
@@ -82,7 +82,7 @@ class ArmyBuilder extends React.Component {
 
     this.setState({detachments: detachArr});
 
-    axios.delete("http://localhost:3000/armybuilder/",
+    axios.delete("http://localhost:3000/armybuilder/detach",
       {data: {id: id}})
       .then((res) => {
         console.log(res);
@@ -92,7 +92,7 @@ class ArmyBuilder extends React.Component {
   getDetachs(){
     let detachArr = this.state.detachments;
     axios
-      .get('http://localhost:3000/armybuilder/')
+      .get('http://localhost:3000/armybuilder/detach')
       .then((res) => {
         res.data.data.map((detachs) => {
           
@@ -111,7 +111,7 @@ class ArmyBuilder extends React.Component {
     if (detachments.length < 10){
       axios
         .post(
-          "http://localhost:3000/armybuilder/",
+          "http://localhost:3000/armybuilder/detach",
           {name: 'Name',
           type: 'Unbound'}
         )
@@ -122,7 +122,6 @@ class ArmyBuilder extends React.Component {
             name: 'Name',
             type: 'Unbound',
             armyId: 1,
-            _v: 0
           });
 
           this.setState({detachments: detachArr});

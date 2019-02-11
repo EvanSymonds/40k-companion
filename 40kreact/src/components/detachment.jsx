@@ -37,6 +37,7 @@ class Detachment extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.toggleMode = this.toggleMode.bind(this);
     this.sendData = this.sendData.bind(this);
+    this.getModelProfiles();
   }
 
   componentDidMount(){
@@ -45,25 +46,73 @@ class Detachment extends React.Component {
 
   actionCallback(observerObject) {
     if (observerObject.action === 'newProfile') {
+      if(observerObject.tag === this.props.id){
+        console.log(`Recieved from button: ${observerObject.id}`);
+        this.addNewProfile();
+      }
+    }
+    if (observerObject.action === 'deleteUnit'){
       console.log(`Recieved from button: ${observerObject.id}`);
-      this.addNewProfile();
+      this.deleteUnit(observerObject.tag);
     }
   }
 
-  addNewProfile(){
-    let profiles = this.state.modelProfiles;
-    console.log(profiles);
-    if (profiles.length < 10){
-      profiles.push({
-        name: 'Name',
-        points: 0,
-        quantity: 1,
-        id: profiles.length
+  getModelProfiles(){
+    let profileArr = this.state.modelProfiles;
+    axios
+      .get('http://localhost:3000/armybuilder/unit',
+      {params: {detachId: this.props.id}})
+      .then((res) => {
+        res.data.map((units) => {
+          profileArr.push(units);
+          this.setState({modelProfiles: profileArr});
+        })
       })
-      this.setState({
-        modelProfiles: profiles
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+  }
+
+  addNewProfile(){
+    axios
+      .post(
+        "http://localhost:3000/armybuilder/unit",
+        {name: 'Name',
+        quantity: 1,
+        points: 0,
+        detachId: this.props.id}
+      )
+      .then(res => {
+        let profileArr = this.state.modelProfiles;
+        profileArr.push({
+          id: res.data._id,
+          name: 'Name',
+          quantity: 1,
+          points: 0,
+          detachId: this.props.id,
+        });
+        this.setState({modelProfiles: profileArr});
       });
-    }
+  }
+
+  deleteUnit(id){
+    let unit = this.state.modelProfiles.find((unit) => {
+      if (unit._id === id){
+        return unit;
+      }
+    });
+
+    let unitArr = this.state.modelProfiles;
+    let index = this.state.modelProfiles.indexOf(unit);
+    unitArr.splice(index, 1);
+
+    this.setState({modelProfiles: unitArr});
+
+    axios.delete("http://localhost:3000/armybuilder/unit",{data: {id: id}})
+      .then((res) => {
+        console.log(res);
+      })
   }
 
   toggleMode(){
@@ -97,8 +146,9 @@ class Detachment extends React.Component {
   }
 
   renderProfiles(){
-    let profiles = this.state.modelProfiles.map(({id}) => {
-      return <ModelProfile observer = {this.actionObserver} key = {id} id ={id} content={'default'}/>;
+    let profiles = this.state.modelProfiles.map((id) => {
+      console.log(id);
+      return <ModelProfile observer = {this.actionObserver} key = {id._id} id ={id._id} content={'default'}/>;
     });
     return profiles;
   }
@@ -126,8 +176,8 @@ class Detachment extends React.Component {
       <React.Fragment>
         {this.renderData()}
         {this.getButtons()}
-        <Button observer = {this.actionObserver} key = {`newprofile ${this.props.id}`} label = {'New profile'} function = {'newProfile'}/>
-        <Button observer = {this.actionObserver} key = {this.props.id} tag={this.props.id}  label = {'Delete'} function = {'delete'}/>
+        <Button observer = {this.actionObserver} key = {`newprofile ${this.props.id}`} label = {'New profile'} function = {'newProfile'} tag={this.props.id}/>
+        <Button observer = {this.actionObserver} key = {this.props.id} tag={this.props.id}  label = {'Delete'} function = {'deleteDetach'}/>
         {this.renderProfiles()}
       </React.Fragment>
     )

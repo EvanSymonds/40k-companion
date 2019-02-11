@@ -10,7 +10,6 @@ class ModelProfileStats extends React.Component {
     }
     this.actionObserver = props.observer;
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.setState({data: this.props.stat});
   }
 
   componentDidMount(){

@@ -3,6 +3,8 @@ const unitCDebug = require('debug')('app:unitCDebug');
 
 const unitSchema = new mongoose.Schema({
   name: String,
+  quantity: Number,
+  points: Number,
   detachId: mongoose.Schema.Types.Mixed
 });
 
@@ -15,15 +17,38 @@ function connect(){
     .catch(err => unitCDebug('Could not connect to database'));
 }
 
-
-async function addUnit(name, detachId){
-  let unit = new Unit({
-    name: name,
-    detachId: detachId
-  }); 
-  const result = await unit.save();
+async function getAll(detachId){
+  let units = await Unit.find({detachId: detachId});
+  return units;
 }
 
+async function addUnit(name, quantity, points, detachId){
+  let unit = new Unit({
+    name: name,
+    quantity: quantity,
+    points,
+    detachId: detachId
+  }); 
+  return await unit.save();
+}
 
+function updateUnit(id, data){
+  return new Promise((resolve, reject) => {
+    let unit = Unit.findByIdAndUpdate(id, 
+      {name: data.name, quantity: data.quantity, points: data.points});
+    resolve(unit);
+  });
+}
+
+function deleteUnit(id){
+  return new Promise((resolve, reject) => {
+    let unit = Unit.deleteOne({"_id": id});
+    resolve(unit);
+  })
+}
+
+module.exports.deleteUnit = deleteUnit;
 module.exports.addUnit = addUnit;
+module.exports.updateUnit = updateUnit;
 module.exports.connect = connect;
+module.exports.getAll = getAll;

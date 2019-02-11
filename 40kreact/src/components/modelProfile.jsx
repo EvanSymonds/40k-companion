@@ -17,6 +17,7 @@ class ModelProfile extends React.Component {
         'points'
       ]
     }
+    console.log(this.props);
   }
 
   componentDidMount(){
@@ -28,6 +29,7 @@ class ModelProfile extends React.Component {
       if (observerObject.tag === this.props.id){
         console.log(`Recieved from button: ${observerObject.id}`);
         this.toggleEditButton();
+        console.log(observerObject.tag);
       }
     }
   }
@@ -46,9 +48,9 @@ class ModelProfile extends React.Component {
 
   getButtonLabel(){
     if (this.state.mode === 'display'){
-      return <Button observer = {this.actionObserver} function={'editModelProfile'} label={'Edit'} tag={this.props.id}/>
+      return <Button observer = {this.actionObserver} function={'editModelProfile'} label={'Edit'} tag={this.props.id} key={`edit ${this.props.id}`}/>
     } else{
-      return <Button observer = {this.actionObserver} function={'editModelProfile'} label={'Save'} tag={this.props.id}/>
+      return <Button observer = {this.actionObserver} function={'editModelProfile'} label={'Save'} tag={this.props.id} key={`delete ${this.props.id}`}/>
     }
   }
   
@@ -69,6 +71,7 @@ class ModelProfile extends React.Component {
       <React.Fragment>
         {this.profileStatConstructor()}
         {this.getButtonLabel()}
+        <Button observer = {this.actionObserver} key = {this.props.id} tag={this.props.id}  label = {'Delete'} function = {'deleteUnit'}/>
       </React.Fragment>
     )
   }
