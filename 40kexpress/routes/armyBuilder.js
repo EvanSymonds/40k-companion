@@ -70,10 +70,21 @@ router.post('/unit', (req, res) => {
 router.delete('/unit', (req, res) => {
   debug(req.body);
   let id = req.body.id;
+  let detachId = req.body.detachId;
   
-  let unit = unitController.deleteUnit(id);
+  let unit = unitController.deleteUnit(id, detachId);
   unit.then((unit) => {
     res.send(unit);
+  })
+})
+router.put('/unit', (req, res) => {
+  let data = req.body.params.data;
+  let id = req.body.params.id;
+  debug(req.body);
+  let units = unitController.updateUnit(id, data);
+  units.then((units) => {
+    debug(units);
+    res.send(units);
   })
 })
 

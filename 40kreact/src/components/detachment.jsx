@@ -52,8 +52,21 @@ class Detachment extends React.Component {
       }
     }
     if (observerObject.action === 'deleteUnit'){
+      if (observerObject.tag === this.props.id){
+        console.log(`Recieved from button: ${observerObject.id}`);
+        console.log(observerObject.tag);
+        this.deleteUnit(observerObject.tag);
+      }
+    }
+    if (observerObject.action === 'saveUnitData'){
       console.log(`Recieved from button: ${observerObject.id}`);
-      this.deleteUnit(observerObject.tag);
+      
+      let id = observerObject.id;
+      let name = observerObject.name;
+      let quantity = observerObject.quantity;
+      let points = observerObject.points;
+
+      this.updateUnit(id, name, quantity, points);
     }
   }
 
@@ -84,6 +97,7 @@ class Detachment extends React.Component {
         detachId: this.props.id}
       )
       .then(res => {
+        console.log(res.data._id);
         let profileArr = this.state.modelProfiles;
         profileArr.push({
           id: res.data._id,
@@ -99,6 +113,7 @@ class Detachment extends React.Component {
   deleteUnit(id){
     let unit = this.state.modelProfiles.find((unit) => {
       if (unit._id === id){
+        console.log(unit._id);
         return unit;
       }
     });
@@ -108,11 +123,25 @@ class Detachment extends React.Component {
     unitArr.splice(index, 1);
 
     this.setState({modelProfiles: unitArr});
+    console.log(this.state.modelProfiles);
 
-    axios.delete("http://localhost:3000/armybuilder/unit",{data: {id: id}})
+    axios.delete("http://localhost:3000/armybuilder/unit",{data: {id: id, detachId: this.props.id}})
       .then((res) => {
         console.log(res);
       })
+      
+  }
+
+  updateProfile(id, name, quantity, points){
+    let data = {
+      name: name,
+      quantity: quantity,
+      points: points
+    }
+    axios
+      .put('http://localhost:3000/armybuilder/unit', 
+      {params: {data: data, id: id}})
+      .then(r => console.log(r.status))
   }
 
   toggleMode(){
@@ -147,8 +176,8 @@ class Detachment extends React.Component {
 
   renderProfiles(){
     let profiles = this.state.modelProfiles.map((id) => {
-      console.log(id);
-      return <ModelProfile observer = {this.actionObserver} key = {id._id} id ={id._id} content={'default'}/>;
+      console.log(id._id);
+      return <ModelProfile observer = {this.actionObserver} key = {id._id} id ={id._id} name={id.name} quantity={id.quantity} points={id.points} detachId={id.detachId} content={'default'}/>;
     });
     return profiles;
   }

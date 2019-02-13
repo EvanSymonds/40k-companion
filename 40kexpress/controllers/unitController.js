@@ -40,9 +40,9 @@ function updateUnit(id, data){
   });
 }
 
-function deleteUnit(id){
+function deleteUnit(id, detachId){
   return new Promise((resolve, reject) => {
-    let unit = Unit.deleteOne({"_id": id});
+    let unit = Unit.deleteOne({"_id": id, detachId: detachId});
     resolve(unit);
   })
 }

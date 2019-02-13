@@ -17,7 +17,6 @@ class ModelProfile extends React.Component {
         'points'
       ]
     }
-    console.log(this.props);
   }
 
   componentDidMount(){
@@ -71,7 +70,7 @@ class ModelProfile extends React.Component {
       <React.Fragment>
         {this.profileStatConstructor()}
         {this.getButtonLabel()}
-        <Button observer = {this.actionObserver} key = {this.props.id} tag={this.props.id}  label = {'Delete'} function = {'deleteUnit'}/>
+        <Button observer = {this.actionObserver} key = {this.props.id} tag={this.props.detachId}  label = {'Delete'} function = {'deleteUnit'}/>
       </React.Fragment>
     )
   }
