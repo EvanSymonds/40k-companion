@@ -74,7 +74,16 @@ class Detachment extends React.Component {
         this.updateProfile(id, name, quantity, points);
       }
     }
-
+    if (observerObject.action === 'sendDetachPoints'){
+      if (observerObject.tag === this.props.id){
+        console.log(`Recieved from button: ${observerObject.id}`);
+        this.actionObserver.notify({
+          action: 'deleteDetach',
+          tag: this.props.id,
+          points: this.state.points
+        })
+      }
+    }
   }
 
   getModelProfiles(){
@@ -105,10 +114,11 @@ class Detachment extends React.Component {
     for(let i=0; i<this.state.modelProfiles.length; i++){
       points = points + Number(this.state.modelProfiles[i].points);
     }
-    console.log(points);
+
     this.actionObserver.notify({
+      action: 'updatePoints',
       id: this.props.id,
-      points: this.state.points
+      points: this.state.points - points
     });
     this.setState({points: points});
   }
@@ -256,7 +266,7 @@ class Detachment extends React.Component {
         {this.renderData()}
         {this.getButtons()}
         <Button observer = {this.actionObserver} key = {`newprofile${this.props.id}`} label = {'New profile'} function = {'newProfile'} tag={this.props.id}/>
-        <Button observer = {this.actionObserver} key = {`delete${this.props.id}`} tag={this.props.id}  label = {'Delete'} function = {'deleteDetach'}/>
+        <Button observer = {this.actionObserver} key = {`delete${this.props.id}`} tag={this.props.id}  label = {'Delete'} function = {'sendDetachPoints'}/>
         {this.renderProfiles()}
       </React.Fragment>
     )

@@ -26,6 +26,7 @@ class ArmyBuilder extends React.Component {
     }
     if (observerObject.action === 'deleteDetach') {
       console.log(`Recieved from button: ${observerObject.id}`);
+      this.setState({points: this.state.points - observerObject.points});
       this.deleteDetach(observerObject.tag);
     }
     if (observerObject.action === 'saveDetachmentData') {
@@ -39,10 +40,11 @@ class ArmyBuilder extends React.Component {
     }
     if (observerObject.action === 'updatePoints') {
       console.log(`Recieved from button: ${observerObject.id}`);
-      this.setState({points: this.state.points + observerObject.points});
+      console.log(observerObject.points);
+      this.setState({points: this.state.points - observerObject.points});
     }
   }
-
+  
   replaceDetach(id, name, type){
     let detach = this.state.detachments.find((detach) => {
       if (detach._id === id){
