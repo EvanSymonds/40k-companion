@@ -63,7 +63,7 @@ class ModelProfile extends React.Component {
       <React.Fragment>
         {this.profileStatConstructor()}
         {this.getButtonLabel()}
-        <Button observer = {this.actionObserver} key = {this.props.id} tag={this.props.detachId}  label = {'Delete'} function = {'deleteUnit'}/>
+        <Button observer = {this.actionObserver} tag={this.props.id} data={this.props.detachId} label = {'Delete'} function = {'deleteUnit'}/>
       </React.Fragment>
     )
   }

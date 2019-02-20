@@ -21,6 +21,7 @@ class Button extends React.Component {
             action: this.props.function,
             id: this.props.label,
             tag: this.props.tag,
+            data: this.props.data,
             key: this.props.key
           })
         }}>

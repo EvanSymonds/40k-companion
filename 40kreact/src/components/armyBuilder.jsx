@@ -9,6 +9,7 @@ class ArmyBuilder extends React.Component {
     this.props = props;
     this.state = {
       detachments: [],
+      points: 0
     }
     this.actionObserver = props.observer;
   }
@@ -35,6 +36,10 @@ class ArmyBuilder extends React.Component {
 
       this.replaceDetach(id, name, type);
       this.updateDetach(id, name, type);
+    }
+    if (observerObject.action === 'updatePoints') {
+      console.log(`Recieved from button: ${observerObject.id}`);
+      this.setState({points: this.state.points + observerObject.points});
     }
   }
 
@@ -142,6 +147,7 @@ class ArmyBuilder extends React.Component {
       <React.Fragment>
         <Button observer = {this.actionObserver} key = {'menu'} label = {'menu'} function = {'navigation'}/>
         <Button observer = {this.actionObserver} key = {'New detachment'} label = {'New detachment'} function = {'newDetachment'}/>
+        <h1>{this.state.points}</h1>
         {this.renderDetachments()}
       </React.Fragment>
     )

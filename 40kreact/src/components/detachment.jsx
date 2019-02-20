@@ -54,10 +54,10 @@ class Detachment extends React.Component {
       }
     }
     if (observerObject.action === 'deleteUnit'){
-      if (observerObject.tag === this.props.id){
+      if (observerObject.data === this.props.id){
         console.log(`Recieved from button: ${observerObject.id}`);
-        console.log(observerObject.key);
-        this.deleteUnit(observerObject.key);
+        console.log(observerObject.tag);
+        this.deleteUnit(observerObject.tag);
       }
     }
     if (observerObject.action === 'saveModelProfile'){
@@ -106,6 +106,10 @@ class Detachment extends React.Component {
       points = points + Number(this.state.modelProfiles[i].points);
     }
     console.log(points);
+    this.actionObserver.notify({
+      id: this.props.id,
+      points: this.state.points
+    });
     this.setState({points: points});
   }
 
@@ -133,21 +137,21 @@ class Detachment extends React.Component {
   }
 
   deleteUnit(id){
+    console.log(id);
     let unit = this.state.modelProfiles.find((unit) => {
+      console.log(unit.id);
       if (unit.id === id){
-        console.log(unit.id);
         return unit;
       }
     });
+    console.log(unit);
     let unitArr = this.state.modelProfiles;
     let index = this.state.modelProfiles.indexOf(unit);
     unitArr.splice(index, 1);
 
     this.setState({modelProfiles: unitArr});
 
-    console.log(unit.id);
-
-    axios.delete("http://localhost:3000/armybuilder/unit",{data: {id: unit.id, detachId: unit.detachId}})
+    axios.delete("http://localhost:3000/armybuilder/unit",{data: {id: id, detachId: unit.detachId}})
       .then((res) => {
         console.log(res);
       })
