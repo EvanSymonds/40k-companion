@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from './button';
-import ModelProfileStats from './modelProfileStats';
+import UnitForm from './unitForm';
 
 class ModelProfile extends React.Component {
   constructor(props,context){
@@ -10,13 +10,6 @@ class ModelProfile extends React.Component {
       mode: 'display'
     }
     this.actionObserver = props.observer;
-    this.infoLibrary = {
-      default: [
-        'name',
-        'quantity',
-        'points'
-      ]
-    }
   }
 
   componentDidMount(){
@@ -25,7 +18,7 @@ class ModelProfile extends React.Component {
 
   actionCallback(observerObject) {
     if (observerObject.action === 'editModelProfile') {
-      if (observerObject.tag === this.props.id){
+      if (observerObject.tag === `form${this.props.id}`){
         console.log(`Recieved from button: ${observerObject.id}`);
         this.toggleEditButton();
         console.log(observerObject.tag);
@@ -47,22 +40,22 @@ class ModelProfile extends React.Component {
 
   getButtonLabel(){
     if (this.state.mode === 'display'){
-      return <Button observer = {this.actionObserver} function={'editModelProfile'} label={'Edit'} tag={this.props.id} key={`edit ${this.props.id}`}/>
+      return <Button observer = {this.actionObserver} function={'editModelProfile'} key="edit" label={'Edit'} tag={`form${this.props.id}`}/>
     } else{
-      return <Button observer = {this.actionObserver} function={'editModelProfile'} label={'Save'} tag={this.props.id} key={`delete ${this.props.id}`}/>
+      return <Button observer = {this.actionObserver} function={'editModelProfile'} key="save" label={'Save'} tag={`form${this.props.id}`}/>
     }
-  }
-  
-  infoDefinition(){
-    return this.infoLibrary[this.props.content];
   }
 
   profileStatConstructor(){
-    let stats = this.infoDefinition().map((stat) => {
-      return <ModelProfileStats observer = {this.actionObserver} key = {stat} stat={stat}
-      group={this.props.id}/>;
-    });
-    return stats;
+    if (this.state.mode === 'display'){
+      return <React.Fragment>
+          <h1 key="name">{this.props.name}</h1>
+          <h1 key="quantity">{this.props.quantity}</h1>
+          <h1 key="points">{this.props.points}</h1>
+        </React.Fragment>
+    } else {
+      return <UnitForm observer = {this.actionObserver} name={this.props.name} quantity={this.props.quantity} points={this.props.points} id={`form${this.props.id}`} detachId={this.props.detachId}/>
+    }
   }
 
   render(){

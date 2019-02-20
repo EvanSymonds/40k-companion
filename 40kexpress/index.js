@@ -3,6 +3,9 @@ const express = require('express');
 const app = express();
 const config = require('config');
 const debug = require('debug')('app:debug');
+const cors = require('cors');
+
+app.use(cors());
 
 //Routes
 const homepage = require('./routes/homepage');

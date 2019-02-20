@@ -36,6 +36,7 @@ function updateUnit(id, data){
   return new Promise((resolve, reject) => {
     let unit = Unit.findByIdAndUpdate(id, 
       {name: data.name, quantity: data.quantity, points: data.points});
+      unitCDebug(unit);
     resolve(unit);
   });
 }

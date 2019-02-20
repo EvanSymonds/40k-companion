@@ -20,7 +20,8 @@ class Button extends React.Component {
           this.actionObserver.notify({
             action: this.props.function,
             id: this.props.label,
-            tag: this.props.tag
+            tag: this.props.tag,
+            key: this.props.key
           })
         }}>
          { this.props.label } </button>

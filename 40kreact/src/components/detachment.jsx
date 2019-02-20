@@ -54,20 +54,25 @@ class Detachment extends React.Component {
     if (observerObject.action === 'deleteUnit'){
       if (observerObject.tag === this.props.id){
         console.log(`Recieved from button: ${observerObject.id}`);
-        console.log(observerObject.tag);
-        this.deleteUnit(observerObject.tag);
+        console.log(observerObject.key);
+        this.deleteUnit(observerObject.key);
       }
     }
-    if (observerObject.action === 'saveUnitData'){
-      console.log(`Recieved from button: ${observerObject.id}`);
-      
-      let id = observerObject.id;
-      let name = observerObject.name;
-      let quantity = observerObject.quantity;
-      let points = observerObject.points;
+    if (observerObject.action === 'saveModelProfile'){
+      if (observerObject.detachId === this.props.id){
+        console.log(`Recieved from button: ${observerObject.id}`);
 
-      this.updateUnit(id, name, quantity, points);
+        console.log('update');
+
+        let id = observerObject.id.substring(4);
+        let name = observerObject.data.name;
+        let quantity = observerObject.data.quantity;
+        let points = observerObject.data.points;
+
+        this.updateProfile(id, name, quantity, points);
+      }
     }
+
   }
 
   getModelProfiles(){
@@ -77,7 +82,13 @@ class Detachment extends React.Component {
       {params: {detachId: this.props.id}})
       .then((res) => {
         res.data.map((units) => {
-          profileArr.push(units);
+          profileArr.push({
+            id: units._id,
+            name: units.name,
+            quantity: units.quantity,
+            points: units.points,
+            detachId: units.detachId
+          });
           this.setState({modelProfiles: profileArr});
         })
       })
@@ -117,15 +128,15 @@ class Detachment extends React.Component {
         return unit;
       }
     });
-
     let unitArr = this.state.modelProfiles;
     let index = this.state.modelProfiles.indexOf(unit);
     unitArr.splice(index, 1);
 
     this.setState({modelProfiles: unitArr});
-    console.log(this.state.modelProfiles);
 
-    axios.delete("http://localhost:3000/armybuilder/unit",{data: {id: id, detachId: this.props.id}})
+    console.log(unit.id);
+
+    axios.delete("http://localhost:3000/armybuilder/unit",{data: {id: unit.id, detachId: unit.detachId}})
       .then((res) => {
         console.log(res);
       })
@@ -133,15 +144,39 @@ class Detachment extends React.Component {
   }
 
   updateProfile(id, name, quantity, points){
+    let profilesArr = this.state.modelProfiles;
+    console.log(id);
+    let unit = this.state.modelProfiles.find((unit) => {
+      if (unit.id === id){
+        console.log(unit.id);
+        return unit;
+      }
+    });
+
+    let index = profilesArr.indexOf(unit);
+    console.log(index);
+    profilesArr[index] = {
+      id: id,
+      name: name,
+      quantity: quantity,
+      points: points,
+      detachId: this.props.id
+    }
+
     let data = {
       name: name,
       quantity: quantity,
       points: points
     }
+    console.log(data, id);
     axios
       .put('http://localhost:3000/armybuilder/unit', 
       {params: {data: data, id: id}})
       .then(r => console.log(r.status))
+
+    console.log(profilesArr);
+
+    this.setState({modelProfiles: profilesArr});
   }
 
   toggleMode(){
@@ -154,9 +189,9 @@ class Detachment extends React.Component {
 
   getButtons(){
     if (this.state.mode === 'display'){
-      return <button onClick={this.toggleMode}>Edit</button>
+      return <button key="edit" onClick={this.toggleMode}>Edit</button>
     } else{
-      return <button onClick={this.sendData}>Save</button>
+      return <button key="save" onClick={this.sendData}>Save</button>
     }
   }
 
@@ -175,9 +210,10 @@ class Detachment extends React.Component {
   }
 
   renderProfiles(){
+    console.log(this.state.modelProfiles);
     let profiles = this.state.modelProfiles.map((id) => {
-      console.log(id._id);
-      return <ModelProfile observer = {this.actionObserver} key = {id._id} id ={id._id} name={id.name} quantity={id.quantity} points={id.points} detachId={id.detachId} content={'default'}/>;
+      console.log(id);
+      return <ModelProfile observer = {this.actionObserver} key = {id.id} id ={id.id} name={id.name} quantity={id.quantity} points={id.points} detachId={id.detachId} content={'default'}/>;
     });
     return profiles;
   }
@@ -205,8 +241,8 @@ class Detachment extends React.Component {
       <React.Fragment>
         {this.renderData()}
         {this.getButtons()}
-        <Button observer = {this.actionObserver} key = {`newprofile ${this.props.id}`} label = {'New profile'} function = {'newProfile'} tag={this.props.id}/>
-        <Button observer = {this.actionObserver} key = {this.props.id} tag={this.props.id}  label = {'Delete'} function = {'deleteDetach'}/>
+        <Button observer = {this.actionObserver} key = {`newprofile${this.props.id}`} label = {'New profile'} function = {'newProfile'} tag={this.props.id}/>
+        <Button observer = {this.actionObserver} key = {`delete${this.props.id}`} tag={this.props.id}  label = {'Delete'} function = {'deleteDetach'}/>
         {this.renderProfiles()}
       </React.Fragment>
     )

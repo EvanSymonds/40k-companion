@@ -12,6 +12,10 @@ class Name extends React.Component {
 
   componentDidMount(){
     this.actionObserver.subscribe(this);
+  } 
+
+  actionCallback(observerObject) {
+
   }
 
   render(){

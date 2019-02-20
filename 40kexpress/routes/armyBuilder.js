@@ -80,7 +80,7 @@ router.delete('/unit', (req, res) => {
 router.put('/unit', (req, res) => {
   let data = req.body.params.data;
   let id = req.body.params.id;
-  debug(req.body);
+  debug(req.body.params);
   let units = unitController.updateUnit(id, data);
   units.then((units) => {
     debug(units);
