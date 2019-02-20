@@ -9,10 +9,11 @@ class Detachment extends React.Component {
     super(props,context);
     this.props = props;
     this.state = {
-      mode: 'display',
+      mode: 'display', 
       name: this.props.name,
       type: this.props.type,
-      modelProfiles:[]
+      modelProfiles:[],
+      points: 0
     }
     this.types = [
       'Unbound',
@@ -37,11 +38,12 @@ class Detachment extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.toggleMode = this.toggleMode.bind(this);
     this.sendData = this.sendData.bind(this);
-    this.getModelProfiles();
+    this.getModelProfiles = this.getModelProfiles.bind(this);
   }
 
   componentDidMount(){
     this.actionObserver.subscribe(this);
+    this.getModelProfiles();
   }
 
   actionCallback(observerObject) {
@@ -89,13 +91,22 @@ class Detachment extends React.Component {
             points: units.points,
             detachId: units.detachId
           });
-          this.setState({modelProfiles: profileArr});
+          this.setState({modelProfiles: profileArr}, this.updatePoints());
         })
       })
       .catch(function (error) {
         // handle error
         console.log(error);
       })
+  }
+
+  updatePoints(){
+    let points = 0;
+    for(let i=0; i<this.state.modelProfiles.length; i++){
+      points = points + Number(this.state.modelProfiles[i].points);
+    }
+    console.log(points);
+    this.setState({points: points});
   }
 
   addNewProfile(){
@@ -123,8 +134,8 @@ class Detachment extends React.Component {
 
   deleteUnit(id){
     let unit = this.state.modelProfiles.find((unit) => {
-      if (unit._id === id){
-        console.log(unit._id);
+      if (unit.id === id){
+        console.log(unit.id);
         return unit;
       }
     });
@@ -140,7 +151,7 @@ class Detachment extends React.Component {
       .then((res) => {
         console.log(res);
       })
-      
+    this.updatePoints();
   }
 
   updateProfile(id, name, quantity, points){
@@ -152,7 +163,6 @@ class Detachment extends React.Component {
         return unit;
       }
     });
-
     let index = profilesArr.indexOf(unit);
     console.log(index);
     profilesArr[index] = {
@@ -172,11 +182,11 @@ class Detachment extends React.Component {
     axios
       .put('http://localhost:3000/armybuilder/unit', 
       {params: {data: data, id: id}})
-      .then(r => console.log(r.status))
+      .then(r => {
+        console.log(r.status)
+        this.updatePoints();
+      })
 
-    console.log(profilesArr);
-
-    this.setState({modelProfiles: profilesArr});
   }
 
   toggleMode(){
@@ -210,9 +220,7 @@ class Detachment extends React.Component {
   }
 
   renderProfiles(){
-    console.log(this.state.modelProfiles);
     let profiles = this.state.modelProfiles.map((id) => {
-      console.log(id);
       return <ModelProfile observer = {this.actionObserver} key = {id.id} id ={id.id} name={id.name} quantity={id.quantity} points={id.points} detachId={id.detachId} content={'default'}/>;
     });
     return profiles;
@@ -224,6 +232,7 @@ class Detachment extends React.Component {
       <React.Fragment>
         <h1>{this.props.name}</h1>
         <h2>{this.props.type}</h2>
+        <h1>{this.state.points}</h1>
       </React.Fragment>
       )
     }else {
@@ -231,6 +240,7 @@ class Detachment extends React.Component {
       <React.Fragment>
         <input className='detachInput' value={this.state.name} onChange={this.handleChange}></input>
         <DropDown observer = {this.actionObserver} types = {this.types} id={this.props.id} updateTypeHandler = {this.updateType}/>
+        <h1>{this.state.points}</h1>
       </React.Fragment>
       )
     }
