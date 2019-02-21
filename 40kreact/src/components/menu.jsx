@@ -26,12 +26,8 @@ class Menu extends React.Component {
     this.actionObserver.subscribe(this);
   }
 
-  menuDefinition(){
-    return this.menuLibrary[this.props.content];
-  }
-
   buttonConstructor(){
-    let buttons = this.menuDefinition().map((button) => {
+    let buttons = this.menuLibrary[this.props.content].map((button) => {
       return <Button observer = {this.actionObserver} key = {button} label = {button} function = {'navigation'}/>;
     });
     return buttons;

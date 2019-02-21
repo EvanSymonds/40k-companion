@@ -1,4 +1,5 @@
 import React from 'react';
+import ButtonUI from '@material-ui/core/Button';
 
 class Button extends React.Component {
   constructor(props,context){
@@ -16,7 +17,7 @@ class Button extends React.Component {
   render(){
     return(
       <React.Fragment>
-        <button onClick={() =>{
+        <ButtonUI variant="contained" onClick={() =>{
           this.actionObserver.notify({
             action: this.props.function,
             id: this.props.label,
@@ -25,7 +26,7 @@ class Button extends React.Component {
             key: this.props.key
           })
         }}>
-         { this.props.label } </button>
+         { this.props.label } </ButtonUI>
       </React.Fragment>
     )
   }

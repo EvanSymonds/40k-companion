@@ -1,6 +1,9 @@
 import React from 'react';
 import Button from './button';
 import UnitForm from './unitForm';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
 
 class ModelProfile extends React.Component {
   constructor(props,context){
@@ -60,11 +63,15 @@ class ModelProfile extends React.Component {
 
   render(){
     return(
-      <React.Fragment>
-        {this.profileStatConstructor()}
-        {this.getButtonLabel()}
-        <Button observer = {this.actionObserver} tag={this.props.id} data={this.props.detachId} label = {'Delete'} function = {'deleteUnit'}/>
-      </React.Fragment>
+      <Card style={{width: 311, marginTop: 20}}>
+        <CardContent>
+          {this.profileStatConstructor()}
+        </CardContent>
+        <CardActions>
+          {this.getButtonLabel()}
+          <Button observer = {this.actionObserver} tag={this.props.id} data={this.props.detachId} label = {'Delete'} function = {'deleteUnit'}/>
+        </CardActions>
+      </Card>
     )
   }
 

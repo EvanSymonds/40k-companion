@@ -3,6 +3,10 @@ import Button from './button';
 import ModelProfile from './modelProfile';
 import DropDown from './dropDown';
 import axios from 'axios';
+import ButtonUI from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Grid from '@material-ui/core/Grid';
 
 class Detachment extends React.Component {
   constructor(props,context){
@@ -112,7 +116,7 @@ class Detachment extends React.Component {
   updatePoints(){
     let points = 0;
     for(let i=0; i<this.state.modelProfiles.length; i++){
-      points = points + Number(this.state.modelProfiles[i].points);
+      points = points + (Number(this.state.modelProfiles[i].points * this.state.modelProfiles[i].quantity));
     }
 
     this.actionObserver.notify({
@@ -213,9 +217,9 @@ class Detachment extends React.Component {
 
   getButtons(){
     if (this.state.mode === 'display'){
-      return <button key="edit" onClick={this.toggleMode}>Edit</button>
+      return <ButtonUI variant="contained" key="edit" onClick={this.toggleMode}>Edit</ButtonUI>
     } else{
-      return <button key="save" onClick={this.sendData}>Save</button>
+      return <ButtonUI variant="contained" key="save" onClick={this.sendData}>Save</ButtonUI>
     }
   }
 
@@ -234,8 +238,13 @@ class Detachment extends React.Component {
   }
 
   renderProfiles(){
+
     let profiles = this.state.modelProfiles.map((id) => {
-      return <ModelProfile observer = {this.actionObserver} key = {id.id} id ={id.id} name={id.name} quantity={id.quantity} points={id.points} detachId={id.detachId} content={'default'}/>;
+      return(
+        <Grid container xs={2}>
+          <ModelProfile observer = {this.actionObserver} key = {id.id} id ={id.id} name={id.name} quantity={id.quantity} points={id.points} detachId={id.detachId} content={'default'}/>
+        </Grid>
+      )
     });
     return profiles;
   }
@@ -253,7 +262,7 @@ class Detachment extends React.Component {
       return (
       <React.Fragment>
         <input className='detachInput' value={this.state.name} onChange={this.handleChange}></input>
-        <DropDown observer = {this.actionObserver} types = {this.types} id={this.props.id} updateTypeHandler = {this.updateType}/>
+        <DropDown observer = {this.actionObserver} types = {this.types} id={this.props.id} updateTypeHandler = {this.updateType} type={this.state.type}/>
         <h1>{this.state.points}</h1>
       </React.Fragment>
       )
@@ -261,13 +270,24 @@ class Detachment extends React.Component {
   }
 
   render(){
+    let midpoint = window.innerWidth/2
+    console.log(midpoint);
     return(
       <React.Fragment>
-        {this.renderData()}
-        {this.getButtons()}
-        <Button observer = {this.actionObserver} key = {`newprofile${this.props.id}`} label = {'New profile'} function = {'newProfile'} tag={this.props.id}/>
-        <Button observer = {this.actionObserver} key = {`delete${this.props.id}`} tag={this.props.id}  label = {'Delete'} function = {'sendDetachPoints'}/>
-        {this.renderProfiles()}
+        <Card style={{width: 320, marginLeft: 'auto', marginRight: 'auto', marginTop: 100, marginBottom: 50}}>
+          <CardContent>
+              {this.renderData()}
+            {this.getButtons()}
+            <Button observer = {this.actionObserver} key = {`newprofile${this.props.id}`} label = {'New profile'} function = {'newProfile'} tag={this.props.id}/>
+            <Button observer = {this.actionObserver} key = {`delete${this.props.id}`} tag={this.props.id}  label = {'Delete'} function = {'sendDetachPoints'}/>
+          </CardContent>
+        </Card>
+        <Grid container spacing={0}
+        direction="row"
+        alignContent="center" 
+        justify="center">
+          {this.renderProfiles()}
+        </Grid>
       </React.Fragment>
     )
   }

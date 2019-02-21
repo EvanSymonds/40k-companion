@@ -5,6 +5,7 @@ class DropDown extends React.Component {
     super(props,context);
     this.props = props;
     this.state = {
+      type: this.props.type
     }
     this.actionObserver = props.observer;
     this.handleChange = this.handleChange.bind(this);
@@ -25,12 +26,13 @@ class DropDown extends React.Component {
     console.log(e.target.value);
     let val = e.target.value;
     this.props.updateTypeHandler(val);
+    this.setState({type: val});
   }
 
   render(){
     return(
       <React.Fragment>
-        <select onChange={this.handleChange}>
+        <select onChange={this.handleChange} value={this.state.type}>
           {this.renderOptions()}
         </select>
       </React.Fragment>
