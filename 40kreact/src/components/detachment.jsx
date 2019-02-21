@@ -6,6 +6,7 @@ import axios from 'axios';
 import ButtonUI from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
 class Detachment extends React.Component {
@@ -240,6 +241,7 @@ class Detachment extends React.Component {
   renderProfiles(){
 
     let profiles = this.state.modelProfiles.map((id) => {
+      console.log(id);
       return(
         <Grid container xs={2}>
           <ModelProfile observer = {this.actionObserver} key = {id.id} id ={id.id} name={id.name} quantity={id.quantity} points={id.points} detachId={id.detachId} content={'default'}/>
@@ -255,7 +257,7 @@ class Detachment extends React.Component {
       <React.Fragment>
         <h1>{this.props.name}</h1>
         <h2>{this.props.type}</h2>
-        <h1>{this.state.points}</h1>
+        <h1>{`Points:${this.state.points}`}</h1>
       </React.Fragment>
       )
     }else {
@@ -263,7 +265,7 @@ class Detachment extends React.Component {
       <React.Fragment>
         <input className='detachInput' value={this.state.name} onChange={this.handleChange}></input>
         <DropDown observer = {this.actionObserver} types = {this.types} id={this.props.id} updateTypeHandler = {this.updateType} type={this.state.type}/>
-        <h1>{this.state.points}</h1>
+        <h1>{`Points:${this.state.points}`}</h1>
       </React.Fragment>
       )
     }
@@ -272,22 +274,25 @@ class Detachment extends React.Component {
   render(){
     let midpoint = window.innerWidth/2
     console.log(midpoint);
+
     return(
       <React.Fragment>
-        <Card style={{width: 320, marginLeft: 'auto', marginRight: 'auto', marginTop: 100, marginBottom: 50}}>
-          <CardContent>
+        <Paper style={{backgroundColor: '#e0e0e0'}}>
+          <Card style={{width: 320, marginLeft: 'auto', marginRight: 'auto', marginBottom: 50, marginTop:50, backgroundColor: '#9e9e9e'}}>
+            <CardContent>
               {this.renderData()}
-            {this.getButtons()}
-            <Button observer = {this.actionObserver} key = {`newprofile${this.props.id}`} label = {'New profile'} function = {'newProfile'} tag={this.props.id}/>
-            <Button observer = {this.actionObserver} key = {`delete${this.props.id}`} tag={this.props.id}  label = {'Delete'} function = {'sendDetachPoints'}/>
-          </CardContent>
-        </Card>
-        <Grid container spacing={0}
-        direction="row"
-        alignContent="center" 
-        justify="center">
-          {this.renderProfiles()}
-        </Grid>
+              {this.getButtons()}
+              <Button observer = {this.actionObserver} key = {`newprofile${this.props.id}`} label = {'New unit'} function = {'newProfile'} tag={this.props.id}/>
+              <Button observer = {this.actionObserver} key = {`delete${this.props.id}`} tag={this.props.id}  label = {'Delete'} function = {'sendDetachPoints'}/>
+            </CardContent>
+          </Card>
+          <Grid container spacing={0}
+          direction="row"
+          alignContent="center" 
+          justify="center">
+            {this.renderProfiles()}
+          </Grid>
+        </Paper>
       </React.Fragment>
     )
   }

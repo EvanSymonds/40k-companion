@@ -17,7 +17,7 @@ class Button extends React.Component {
   render(){
     return(
       <React.Fragment>
-        <ButtonUI variant="contained" onClick={() =>{
+        <ButtonUI style={{margin:5}} variant="contained" onClick={() =>{
           this.actionObserver.notify({
             action: this.props.function,
             id: this.props.label,

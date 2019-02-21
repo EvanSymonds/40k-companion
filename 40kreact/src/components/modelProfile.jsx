@@ -53,8 +53,8 @@ class ModelProfile extends React.Component {
     if (this.state.mode === 'display'){
       return <React.Fragment>
           <h1 key="name">{this.props.name}</h1>
-          <h1 key="quantity">{this.props.quantity}</h1>
-          <h1 key="points">{this.props.points}</h1>
+          <h1 key="quantity">{`Quantity:${this.props.quantity}`}</h1>
+          <h1 key="points">{`Points:${this.props.points}`}</h1>
         </React.Fragment>
     } else {
       return <UnitForm observer = {this.actionObserver} name={this.props.name} quantity={this.props.quantity} points={this.props.points} id={`form${this.props.id}`} detachId={this.props.detachId}/>
@@ -63,7 +63,7 @@ class ModelProfile extends React.Component {
 
   render(){
     return(
-      <Card style={{width: 311, marginTop: 20}}>
+      <Card style={{width: 311, marginTop: 20, marginBottom: 20, backgroundColor: '#bdbdbd', minWidth: 311}}>
         <CardContent>
           {this.profileStatConstructor()}
         </CardContent>

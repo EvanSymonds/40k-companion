@@ -149,7 +149,7 @@ class ArmyBuilder extends React.Component {
       <React.Fragment>
         <Button observer = {this.actionObserver} key = {'menu'} label = {'menu'} function = {'navigation'}/>
         <Button observer = {this.actionObserver} key = {'New detachment'} label = {'New detachment'} function = {'newDetachment'}/>
-        <h1>{this.state.points}</h1>
+        <h1>{`Total points:${this.state.points}`}</h1>
         {this.renderDetachments()}
       </React.Fragment>
     )
