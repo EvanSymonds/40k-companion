@@ -11,11 +11,11 @@ class MainApp extends React.Component {
     super(props,context);
     this.props = props;
     this.state = {
-
+      loggedIn: false,
+      page: 'Menu'
     }
     this.observerList = new ObserverList();
     this.actionObserver = this.observerList.addObserver('actionObserver', 'actionCallback');
-    this.state = {page:'menu'};
   }
 
   componentDidMount(){
@@ -27,22 +27,25 @@ class MainApp extends React.Component {
       console.log(`Recieved from button: ${observerObject.id}`);
       this.setState({page:observerObject.id});
     }
+    if (observerObject.action === 'changeViewState') {
+      console.log(`Recieved from button: ${observerObject.id}`);
+      this.setState({loggedIn: observerObject.data, page: 'Menu'});
+    }
   }
 
   currentlyDisplayed(page){
+    console.log(this.state.loggedIn);
     switch(page){
-      case 'menu':
-        return <Menu content = {'default'} observer ={this.actionObserver}/>;
+      case 'Menu':
+        return <Menu content = {'default'} loggedIn={this.state.loggedIn} observer ={this.actionObserver}/>;
       case 'Army builder':
-        return <ArmyBuilder observer ={this.actionObserver}/>;
+        return <ArmyBuilder loggedIn={this.state.loggedIn} observer ={this.actionObserver}/>;
       case 'Campaign manager':
         return <CampaignManager observer ={this.actionObserver}/>;
       case  'Login':
         return <Login observer ={this.actionObserver}/>;
       case 'Sign up':
         return <SignUp observer ={this.actionObserver}/>;
-      default:
-        return <Menu content = {'default'} observer ={this.actionObserver}/>;
     }
   }
 

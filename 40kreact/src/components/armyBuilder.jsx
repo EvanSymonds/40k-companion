@@ -148,31 +148,57 @@ class ArmyBuilder extends React.Component {
   }
 
   render(){
-    return(
-      <React.Fragment>
-        <AppBar position="static" style={{backgroundColor:"#b71c1c"}}>
-          <Toolbar>
-            <ButtonUI color="inherit" onClick={() => {
-              this.actionObserver.notify({
-                action: 'navigation',
-                id: 'Menu',
-                tag: this.props.id
-              })}}>
-            Menu</ButtonUI>
-            <ButtonUI color="inherit" style={{marginLeft: 1736}} onClick={() => {
-              this.actionObserver.notify({
-                action: 'navigation',
-                id: 'Login',
-                tag: this.props.id
-              })}}>
-            Login</ButtonUI>
-          </Toolbar>
-        </AppBar>
-        <Button observer = {this.actionObserver} key = {'New detachment'} label = {'New detachment'} function = {'newDetachment'}/>
-        <h1>{`Total points:${this.state.points}`}</h1>
-        {this.renderDetachments()}
-      </React.Fragment>
-    )
+    if (this.props.loggedIn === true){
+      return(
+        <React.Fragment>
+          <AppBar position="static" style={{backgroundColor:"#b71c1c"}}>
+            <Toolbar>
+              <ButtonUI color="inherit" onClick={() => {
+                this.actionObserver.notify({
+                  action: 'navigation',
+                  id: 'Menu',
+                  tag: this.props.id
+                })}}>
+              Menu</ButtonUI>
+              <ButtonUI color="inherit" style={{marginLeft: 1736}} onClick={() => {
+                this.actionObserver.notify({
+                  action: 'navigation',
+                  id: 'Login',
+                  tag: this.props.id
+                })}}>
+              Login</ButtonUI>
+            </Toolbar>
+          </AppBar>
+          <Button observer = {this.actionObserver} key = {'New detachment'} label = {'New detachment'} function = {'newDetachment'}/>
+          <h1>{`Total points:${this.state.points}`}</h1>
+          {this.renderDetachments()}
+        </React.Fragment>
+      )
+    } else {
+      return(
+        <React.Fragment>
+          <AppBar position="static" style={{backgroundColor:"#b71c1c"}}>
+            <Toolbar>
+              <ButtonUI color="inherit" onClick={() => {
+                this.actionObserver.notify({
+                  action: 'navigation',
+                  id: 'Menu',
+                  tag: this.props.id
+                })}}>
+              Menu</ButtonUI>
+              <ButtonUI color="inherit" style={{marginLeft: 1736}} onClick={() => {
+                this.actionObserver.notify({
+                  action: 'navigation',
+                  id: 'Login',
+                  tag: this.props.id
+                })}}>
+              Login</ButtonUI>
+            </Toolbar>
+          </AppBar>
+          <h1>Please log in to use this feature</h1>
+        </React.Fragment>
+      )
+    }
   }
 
   componentWillUnmount(){
