@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 
 class LoginForm extends React.Component {
   constructor(props,context){
@@ -33,6 +34,15 @@ class LoginForm extends React.Component {
       user: this.state.user,
       pass: this.state.pass
     });
+    axios
+      .get('http://localhost:3000/login/user')
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
   }
 
   render(){

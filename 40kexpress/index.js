@@ -11,15 +11,14 @@ app.use(cors());
 const homepage = require('./routes/homepage');
 const armyBuilder = require('./routes/armyBuilder');
 const campaignManager = require('./routes/campaignManager');
-const playerStats = require('./routes/playerStats');
-const eventCalandar = require('./routes/eventCalandar');
+const login = require('./routes/login');
+
 
 //Using routes
 app.use('/', homepage);
 app.use('/armybuilder', armyBuilder);
 app.use('/campaignmanager', campaignManager);
-app.use('/playerstats', playerStats);
-app.use('/eventcalandar', eventCalandar);
+app.use('/login', login)
 
 //Controller imports
 const groupController = require('./controllers/groupController');
