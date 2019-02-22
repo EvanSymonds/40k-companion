@@ -42,7 +42,8 @@ class LoginForm extends React.Component {
           password: this.state.password}
         )
         .then(res => {
-          if(typeof res != Object){
+          console.log(typeof res.data);
+          if(typeof res.data != 'object'){
             this.setState({error: res.data});
           } else {
             this.setState({error: false});
@@ -51,6 +52,7 @@ class LoginForm extends React.Component {
   }
 
   renderError(){
+    console.log(this.state.error);
     if (this.state.error === false){
       return <h1></h1>
     }else {

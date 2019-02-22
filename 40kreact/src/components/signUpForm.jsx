@@ -41,7 +41,7 @@ class SignUpForm extends React.Component {
         "http://localhost:3000/login/signup",
         {username: this.state.user, password: this.state.pass})
       .then((res) => {
-        if (typeof res.data != Object){
+        if (typeof res.data != 'object'){
           this.setState({error: res.data}, console.log(this.state.error));
         } else {
           this.setState({error: false});
