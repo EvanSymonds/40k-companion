@@ -2,25 +2,32 @@ import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import ButtonUI from '@material-ui/core/Button';
+import LoginForm from './loginForm.jsx';
 
-class CampaignManager extends React.Component {
+class Login extends React.Component {
   constructor(props,context){
     super(props,context);
     this.props = props;
     this.state = {
-
     }
     this.actionObserver = props.observer;
   }
 
   componentDidMount(){
     this.actionObserver.subscribe(this);
+
+  } 
+
+  actionCallback(observerObject) {
+    if (observerObject.action === 'login') {
+      console.log(observerObject.user, observerObject.pass);
+    }
   }
 
   render(){
     return(
       <React.Fragment>
-       <AppBar position="static" style={{backgroundColor:"#b71c1c"}}>
+        <AppBar position="static" style={{backgroundColor:"#b71c1c"}}>
           <Toolbar>
             <ButtonUI color="inherit" onClick={() => {
               this.actionObserver.notify({
@@ -29,16 +36,10 @@ class CampaignManager extends React.Component {
                 tag: this.props.id
               })}}>
             Menu</ButtonUI>
-            <ButtonUI color="inherit" style={{marginLeft: 1736}} onClick={() => {
-              this.actionObserver.notify({
-                action: 'navigation',
-                id: 'Login',
-                tag: this.props.id
-              })}}>
-            Login</ButtonUI>
           </Toolbar>
         </AppBar>
-        <h1>Feature in development</h1>
+
+        <LoginForm observer = {this.actionObserver} user="" pass=""></LoginForm>
       </React.Fragment>
     )
   }
@@ -49,4 +50,4 @@ class CampaignManager extends React.Component {
 
 }
 
-export default CampaignManager;
+export default Login;

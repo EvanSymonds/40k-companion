@@ -71,6 +71,11 @@ router.delete('/unit', (req, res) => {
   debug(req.body);
   let id = req.body.id;
   let detachId = req.body.detachId;
+
+  if (req.body.deleteAll === true){
+    unitController.deleteAllUnits(detachId);
+  }
+
   debug(id, detachId);
   let unit = unitController.deleteUnit(id, detachId);
   unit.then((unit) => {

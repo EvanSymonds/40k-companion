@@ -1,8 +1,9 @@
 import React from 'react';
 import Menu from './menu';
 import ObserverList from '../ObserverList';
-import ArmyBuilder from './armyBuilder';
-import CampaignManager from './campaignManager';
+import ArmyBuilder from './armyBuilder.jsx';
+import CampaignManager from './campaignManager.jsx';
+import Login from './login.jsx';
 
 class MainApp extends React.Component {
   constructor(props,context){
@@ -35,6 +36,8 @@ class MainApp extends React.Component {
         return <ArmyBuilder observer ={this.actionObserver}/>;
       case 'Campaign manager':
         return <CampaignManager observer ={this.actionObserver}/>;
+      case  'Login':
+        return <Login observer ={this.actionObserver}/>;
       default:
         return <Menu content = {'default'} observer ={this.actionObserver}/>;
     }

@@ -2,6 +2,9 @@ import React from 'react';
 import Button from './button';
 import Detachment from './detachment';
 import axios from 'axios';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import ButtonUI from '@material-ui/core/Button';
 
 class ArmyBuilder extends React.Component {
   constructor(props,context){
@@ -147,7 +150,24 @@ class ArmyBuilder extends React.Component {
   render(){
     return(
       <React.Fragment>
-        <Button observer = {this.actionObserver} key = {'menu'} label = {'menu'} function = {'navigation'}/>
+        <AppBar position="static" style={{backgroundColor:"#b71c1c"}}>
+          <Toolbar>
+            <ButtonUI color="inherit" onClick={() => {
+              this.actionObserver.notify({
+                action: 'navigation',
+                id: 'Menu',
+                tag: this.props.id
+              })}}>
+            Menu</ButtonUI>
+            <ButtonUI color="inherit" style={{marginLeft: 1736}} onClick={() => {
+              this.actionObserver.notify({
+                action: 'navigation',
+                id: 'Login',
+                tag: this.props.id
+              })}}>
+            Login</ButtonUI>
+          </Toolbar>
+        </AppBar>
         <Button observer = {this.actionObserver} key = {'New detachment'} label = {'New detachment'} function = {'newDetachment'}/>
         <h1>{`Total points:${this.state.points}`}</h1>
         {this.renderDetachments()}

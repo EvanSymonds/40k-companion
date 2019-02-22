@@ -82,6 +82,12 @@ class Detachment extends React.Component {
     if (observerObject.action === 'sendDetachPoints'){
       if (observerObject.tag === this.props.id){
         console.log(`Recieved from button: ${observerObject.id}`);
+
+        axios.delete("http://localhost:3000/armybuilder/unit",{data: {id: this.state.modelProfiles[0].id, detachId: this.props.id, deleteAll: true}})
+          .then((res) => {
+            console.log(res);
+          })
+
         this.actionObserver.notify({
           action: 'deleteDetach',
           tag: this.props.id,
@@ -166,7 +172,7 @@ class Detachment extends React.Component {
 
     this.setState({modelProfiles: unitArr});
 
-    axios.delete("http://localhost:3000/armybuilder/unit",{data: {id: id, detachId: unit.detachId}})
+    axios.delete("http://localhost:3000/armybuilder/unit",{data: {id: id, detachId: unit.detachId, deleteAll: false}})
       .then((res) => {
         console.log(res);
       })
@@ -235,7 +241,8 @@ class Detachment extends React.Component {
   }
 
   handleChange(e){
-    this.setState({name: e.target.value});
+    this.setState({name: e.target.value},
+      console.log(e.target.value));
   }
 
   renderProfiles(){

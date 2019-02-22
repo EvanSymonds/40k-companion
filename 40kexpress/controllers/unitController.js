@@ -48,8 +48,16 @@ function deleteUnit(id, detachId){
   })
 }
 
+function deleteAllUnits(detachId){
+  return new Promise((resolve, reject) => {
+    let unit = Unit.deleteMany({detachId: detachId});
+    resolve(unit);
+  })
+}
+
 module.exports.deleteUnit = deleteUnit;
 module.exports.addUnit = addUnit;
 module.exports.updateUnit = updateUnit;
 module.exports.connect = connect;
 module.exports.getAll = getAll;
+module.exports.deleteAllUnits = deleteAllUnits;
