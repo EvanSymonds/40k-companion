@@ -1,13 +1,13 @@
 import React from 'react';
 import axios from 'axios';
 
-class LoginForm extends React.Component {
+class SignUpForm extends React.Component {
   constructor(props,context){
     super(props,context);
     this.props = props;
     this.state = {
-        username: this.props.user,
-        password: this.props.pass,
+        user: this.props.user,
+        pass: this.props.pass,
         error: false
     }
     this.actionObserver = props.observer;
@@ -32,28 +32,27 @@ class LoginForm extends React.Component {
     e.preventDefault();
     this.actionObserver.notify({
       action: 'login',
-      username: this.state.username,
-      password: this.state.password
+      user: this.state.user,
+      pass: this.state.pass
     });
+
     axios
-        .post(
-          "http://localhost:3000/login",
-          {username: this.state.username,
-          password: this.state.password}
-        )
-        .then(res => {
-          if(typeof res != Object){
-            this.setState({error: res.data});
-          } else {
-            this.setState({error: false});
-          }
-        })
+      .post(
+        "http://localhost:3000/login/signup",
+        {username: this.state.user, password: this.state.pass})
+      .then((res) => {
+        if (typeof res.data != Object){
+          this.setState({error: res.data}, console.log(this.state.error));
+        } else {
+          this.setState({error: false});
+        }
+      })
   }
 
   renderError(){
-    if (this.state.error === false){
+    if(this.state.error === false){
       return <h1></h1>
-    }else {
+    } else {
       return <h1>{this.state.error}</h1>
     }
   }
@@ -62,10 +61,10 @@ class LoginForm extends React.Component {
     return(
       <React.Fragment>
         <form>
-          <input name="username" value={this.state.username} onChange={this.handleChange}></input>
-          <input name="password" value={this.state.password} onChange={this.handleChange}>
+          <input name="user" value={this.state.user} onChange={this.handleChange}></input>
+          <input name="pass" value={this.state.pass} onChange={this.handleChange}>
           </input>
-          <button onClick={this.handleSubmit}>Login</button>
+          <button onClick={this.handleSubmit}>Sign up</button>
         </form>
         {this.renderError()}
       </React.Fragment>
@@ -78,4 +77,4 @@ class LoginForm extends React.Component {
 
 }
 
-export default LoginForm;
+export default SignUpForm;

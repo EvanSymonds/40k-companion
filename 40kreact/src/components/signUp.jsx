@@ -2,23 +2,24 @@ import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import ButtonUI from '@material-ui/core/Button';
-import LoginForm from './loginForm.jsx';
+import SignUpForm from './signUpForm.jsx';
 
-class Login extends React.Component {
+class SignUp extends React.Component {
   constructor(props,context){
     super(props,context);
     this.props = props;
     this.state = {
+
     }
     this.actionObserver = props.observer;
   }
 
   componentDidMount(){
     this.actionObserver.subscribe(this);
-
   } 
 
   actionCallback(observerObject) {
+
   }
 
   render(){
@@ -33,17 +34,17 @@ class Login extends React.Component {
                 tag: this.props.id
               })}}>
             Menu</ButtonUI>
+            <ButtonUI color="inherit" style={{marginLeft: 1736}} onClick={() => {
+              this.actionObserver.notify({
+                action: 'navigation',
+                id: 'Login',
+                tag: this.props.id
+              })}}>
+            Login</ButtonUI>
           </Toolbar>
         </AppBar>
 
-        <LoginForm observer = {this.actionObserver} user="" pass=""></LoginForm>
-        <ButtonUI onClick={() => {
-              this.actionObserver.notify({
-                action: 'navigation',
-                id: 'Sign up',
-                tag: this.props.id
-              })}}>
-            Sign up</ButtonUI>
+        <SignUpForm observer = {this.actionObserver} user="" pass=""></SignUpForm>
       </React.Fragment>
     )
   }
@@ -54,4 +55,4 @@ class Login extends React.Component {
 
 }
 
-export default Login;
+export default SignUp;

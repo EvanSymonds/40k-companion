@@ -2,14 +2,13 @@ const mongoose = require('mongoose');
 const userCDebug = require('debug')('app:userCDebug');
 
 const userSchema = new mongoose.Schema({
-  name: {
+  username: {
     type: String,
-    unique: true,
     required: true,
     minlength: 3,
     maxlength: 20
   },
-  pass: {
+  password: {
     type: String,
     required: true,
     minlength: 5,
@@ -30,23 +29,28 @@ async function getAll(){
   return users;
 }
 
-async function getOne(name){
-  let user = await User.findOne({name: name})
+async function getOne(username){
+  let user = await User.findOne({username: username})
   return user;
 }
 
 async function newUser(login){
-  let user = await User.findOne(login);
-  if ( user ) return false;
 
-  user = new User({
-    name: login.name,
-    pass: login.pass
-  })
+  let user = await User.findOne({username: login.username});
+  userCDebug(user);
+  if ( user ) {
+    return false;
+  } else {  
+    user = new User({
+      username: login.username,
+      password: login.password
+    })
 
-  user = new Promise((resolve, reject) => {
-    resolve(user.save());
-  })
+    user = new Promise((resolve, reject) => {
+      resolve(user.save());
+    })
+    return user;
+  }
 }
 
 module.exports.getOne = getOne;
