@@ -37,13 +37,6 @@ class Login extends React.Component {
         </AppBar>
 
         <LoginForm observer = {this.actionObserver} user="" pass=""></LoginForm>
-        <ButtonUI onClick={() => {
-              this.actionObserver.notify({
-                action: 'navigation',
-                id: 'Sign up',
-                tag: this.props.id
-              })}}>
-            Sign up</ButtonUI>
       </React.Fragment>
     )
   }

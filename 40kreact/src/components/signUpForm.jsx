@@ -35,6 +35,11 @@ class SignUpForm extends React.Component {
       user: this.state.user,
       pass: this.state.pass
     });
+    this.actionObserver.notify({
+      action: 'changeViewState',
+      tag: true,
+      data: this.state.username
+    });
 
     axios
       .post(

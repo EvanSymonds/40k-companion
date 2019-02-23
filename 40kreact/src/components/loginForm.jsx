@@ -1,5 +1,10 @@
 import React from 'react';
 import axios from 'axios';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import ButtonUI from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
 
 class LoginForm extends React.Component {
   constructor(props,context){
@@ -68,13 +73,33 @@ class LoginForm extends React.Component {
   render(){
     return(
       <React.Fragment>
-        <form>
-          <input name="username" value={this.state.username} onChange={this.handleChange}></input>
-          <input name="password" value={this.state.password} onChange={this.handleChange}>
-          </input>
-          <button onClick={this.handleSubmit}>Login</button>
-        </form>
-        {this.renderError()}
+        <Paper style={{
+          width: 400,
+          margin:'auto',
+          marginTop: 300,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center'}}>
+          <form>
+            <FormControl style={{ width: '100%'}}>
+              <InputLabel style={{ marginTop: 22}}>Username</InputLabel>
+              <Input name="username" value={this.state.username} onChange={this.handleChange} style={{ marginTop: 30}}/>
+            </FormControl>
+            <FormControl style={{ width: '100%'}}>
+              <InputLabel style={{ marginTop: 42}}>Password</InputLabel>
+              <Input name="password" value={this.state.password} onChange={this.handleChange} style={{ marginTop: 50}}/>
+            </FormControl>
+            <ButtonUI onClick={this.handleSubmit}>Login</ButtonUI>
+            <ButtonUI onClick={() => {
+                this.actionObserver.notify({
+                  action: 'navigation',
+                  id: 'Sign up',
+                  tag: this.props.id
+                })}}>
+              Sign up</ButtonUI>
+            {this.renderError()}
+          </form>
+        </Paper>
       </React.Fragment>
     )
   }
