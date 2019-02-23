@@ -29,7 +29,9 @@ router.put('/detach', (req, res) => {
 router.post('/detach', (req, res) => {
   let name = req.body.name;
   let type = req.body.type;
-  let id = detachController.addDetach(name, type, 1);
+  let userId = req.body.userId
+
+  let id = detachController.addDetach(name, type, userId);
   id.then((id) => {
     debug(id);
     res.send(id);

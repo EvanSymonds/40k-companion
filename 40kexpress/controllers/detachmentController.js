@@ -4,7 +4,7 @@ const detachCDebug = require('debug')('app:detachCDebug');
 const detachSchema = new mongoose.Schema({
   name: String,
   type: String,
-  armyId: mongoose.Schema.Types.Mixed
+  userId: mongoose.Schema.Types.Mixed
 });
 
 const Detach = mongoose.model('detachment', detachSchema);
@@ -36,11 +36,11 @@ function deleteDetach(id){
   })
 }
 
-async function addDetach(name, type, armyId){
+async function addDetach(name, type, userId){
   let detach = new Detach({
     name: name,
     type: type,
-    armyId: armyId
+    userId: userId
   }); 
   let result = await detach.save();
   return(result._id);

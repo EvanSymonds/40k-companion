@@ -1,7 +1,5 @@
 import React from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import ButtonUI from '@material-ui/core/Button';
+import MenuBar from './menuBar.jsx';
 
 class CampaignManager extends React.Component {
   constructor(props,context){
@@ -20,24 +18,7 @@ class CampaignManager extends React.Component {
   render(){
     return(
       <React.Fragment>
-       <AppBar position="static" style={{backgroundColor:"#b71c1c"}}>
-          <Toolbar>
-            <ButtonUI color="inherit" onClick={() => {
-              this.actionObserver.notify({
-                action: 'navigation',
-                id: 'Menu',
-                tag: this.props.id
-              })}}>
-            Menu</ButtonUI>
-            <ButtonUI color="inherit" style={{marginLeft: 1736}} onClick={() => {
-              this.actionObserver.notify({
-                action: 'navigation',
-                id: 'Login',
-                tag: this.props.id
-              })}}>
-            Login</ButtonUI>
-          </Toolbar>
-        </AppBar>
+        <MenuBar observer ={this.actionObserver} loggedIn={this.props.loggedIn} user={this.props.user}/>
         <h1>Feature in development</h1>
       </React.Fragment>
     )

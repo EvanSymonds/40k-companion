@@ -1,7 +1,5 @@
 import React from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
+import MenuBar from './menuBar.jsx';
 import ButtonUI from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -62,17 +60,7 @@ class Menu extends React.Component {
     return(
       <React.Fragment>
         
-        <AppBar position="static" style={{backgroundColor:"#b71c1c"}}>
-          <Toolbar>
-            <ButtonUI color="inherit" style={{marginLeft: 1800}} onClick={() => {
-              this.actionObserver.notify({
-                action: 'navigation',
-                id: 'Login',
-                tag: this.props.id
-              })}}>
-            Login</ButtonUI>
-          </Toolbar>
-        </AppBar>
+        <MenuBar observer ={this.actionObserver} loggedIn={this.props.loggedIn} user={this.props.user}/>
         <Grid container spacing={0} direction="row"
           alignContent="center" 
           justify="center">

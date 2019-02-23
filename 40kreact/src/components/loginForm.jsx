@@ -49,7 +49,8 @@ class LoginForm extends React.Component {
             this.setState({error: false});
             this.actionObserver.notify({
               action: 'changeViewState',
-              data: true,
+              tag: true,
+              data: this.state.username
             })
           }
         })

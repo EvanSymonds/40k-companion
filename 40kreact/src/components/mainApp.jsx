@@ -12,7 +12,8 @@ class MainApp extends React.Component {
     this.props = props;
     this.state = {
       loggedIn: false,
-      page: 'Menu'
+      page: 'Menu',
+      username: ''
     }
     this.observerList = new ObserverList();
     this.actionObserver = this.observerList.addObserver('actionObserver', 'actionCallback');
@@ -29,7 +30,8 @@ class MainApp extends React.Component {
     }
     if (observerObject.action === 'changeViewState') {
       console.log(`Recieved from button: ${observerObject.id}`);
-      this.setState({loggedIn: observerObject.data, page: 'Menu'});
+      console.log(observerObject.data);
+      this.setState({loggedIn: observerObject.tag, page: 'Menu', username: observerObject.data});
     }
   }
 
@@ -37,11 +39,11 @@ class MainApp extends React.Component {
     console.log(this.state.loggedIn);
     switch(page){
       case 'Menu':
-        return <Menu content = {'default'} loggedIn={this.state.loggedIn} observer ={this.actionObserver}/>;
+        return <Menu content = {'default'} user={this.state.username} loggedIn={this.state.loggedIn} observer ={this.actionObserver}/>;
       case 'Army builder':
-        return <ArmyBuilder loggedIn={this.state.loggedIn} observer ={this.actionObserver}/>;
+        return <ArmyBuilder loggedIn={this.state.loggedIn} user={this.state.username} observer ={this.actionObserver}/>;
       case 'Campaign manager':
-        return <CampaignManager observer ={this.actionObserver}/>;
+        return <CampaignManager loggedIn={this.state.loggedIn} user={this.state.username} observer ={this.actionObserver}/>;
       case  'Login':
         return <Login observer ={this.actionObserver}/>;
       case 'Sign up':
