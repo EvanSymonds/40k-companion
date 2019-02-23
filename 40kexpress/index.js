@@ -5,6 +5,8 @@ const config = require('config');
 const debug = require('debug')('app:debug');
 const cors = require('cors');
 
+require('./startup/prod')(app);
+
 app.use(cors());
 
 //Routes

@@ -1,5 +1,10 @@
 import React from 'react';
 import axios from 'axios';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import ButtonUI from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
 
 class SignUpForm extends React.Component {
   constructor(props,context){
@@ -56,22 +61,36 @@ class SignUpForm extends React.Component {
 
   renderError(){
     if(this.state.error === false){
-      return <h1></h1>
+      return <h3></h3>
     } else {
-      return <h1>{this.state.error}</h1>
+      return <h3>{this.state.error}</h3>
     }
   }
 
   render(){
     return(
       <React.Fragment>
-        <form>
-          <input name="user" value={this.state.user} onChange={this.handleChange}></input>
-          <input name="pass" value={this.state.pass} onChange={this.handleChange}>
-          </input>
-          <button onClick={this.handleSubmit}>Sign up</button>
-        </form>
-        {this.renderError()}
+        <Paper style={{
+          width: 400,
+          margin:'auto',
+          marginTop: 300,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center'}}>
+          <form>
+            <FormControl style={{ width: '100%'}}>
+              <InputLabel style={{ marginTop: 22}}>Username</InputLabel>
+              <Input name="username" value={this.state.username} onChange={this.handleChange} style={{ marginTop: 30}}/>
+            </FormControl>
+            <FormControl style={{ width: '100%'}}>
+              <InputLabel style={{ marginTop: 42}}>Password</InputLabel>
+              <Input name="password" value={this.state.password} onChange={this.handleChange} style={{ marginTop: 50}}/>
+            </FormControl>
+            <ButtonUI onClick={this.handleSubmit}>
+              Sign up</ButtonUI>
+            {this.renderError()}
+          </form>
+        </Paper>
       </React.Fragment>
     )
   }

@@ -64,9 +64,9 @@ class LoginForm extends React.Component {
   renderError(){
     console.log(this.state.error);
     if (this.state.error === false){
-      return <h1></h1>
+      return <h3></h3>
     }else {
-      return <h1>{this.state.error}</h1>
+      return <h3>{this.state.error}</h3>
     }
   }
 
